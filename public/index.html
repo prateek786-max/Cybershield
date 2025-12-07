@@ -676,6 +676,17 @@
             <label>Email</label>
             <input type="email" id="signupEmail" placeholder="you@example.com" />
           </div>
+<div class="field">
+  <label>Phone number</label>
+  <input
+    type="tel"
+    id="signupPhone"
+    placeholder="10-digit mobile number"
+    pattern="[0-9]{10}"
+  />
+</div>
+
+
           <div class="field">
             <label>Create password</label>
             <input type="password" id="signupPassword" placeholder="Minimum 6 characters" />
@@ -835,23 +846,70 @@
     loginForm.style.display = "none";
   };
 
-  async function signup() {
-    const name = document.getElementById("signupName").value.trim();
-    const email = document.getElementById("signupEmail").value.trim();
-    const password = document.getElementById("signupPassword").value;
-    const confirm = document.getElementById("signupConfirm").value;
-    const statusEl = document.getElementById("signupStatus");
-    statusEl.textContent = "";
-    statusEl.className = "status";
+ 
+async function signup() {
+  const name = document.getElementById("signupName").value.trim();
+  const email = document.getElementById("signupEmail").value.trim();
+  const phone = document.getElementById("signupPhone").value.trim();
+  const password = document.getElementById("signupPassword").value;
+  const confirm = document.getElementById("signupConfirm").value;
+  const statusEl = document.getElementById("signupStatus");
+  statusEl.textContent = "";
+  statusEl.className = "status";
 
-    if (!name || !email || !password || !confirm) {
-      statusEl.textContent = "Please fill all fields.";
+  if (!name || !email || !phone || !password || !confirm) {
+    statusEl.textContent = "Please fill all fields.";
+    statusEl.classList.add("err");
+    return;
+  }
+
+  if (phone.length < 10) {
+    statusEl.textContent = "Please enter a valid phone number.";
+    statusEl.classList.add("err");
+    return;
+  }
+
+  if (password !== confirm) {
+    statusEl.textContent = "Passwords do not match.";
+    statusEl.classList.add("err");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/signup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      // ✅ phone bhi backend ko bhej rahe hain
+      body: JSON.stringify({ name, email, phone, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      statusEl.textContent = data.message || "Signup failed.";
       statusEl.classList.add("err");
       return;
     }
-    if (password !== confirm) {
-      statusEl.textContent = "Passwords do not match.";
-      statusEl.classList.add("err");
+
+    statusEl.textContent = "Account created. You can now login.";
+    statusEl.classList.add("ok");
+
+    // fields clear
+    document.getElementById("signupName").value = "";
+    document.getElementById("signupEmail").value = "";
+    document.getElementById("signupPhone").value = "";
+    document.getElementById("signupPassword").value = "";
+    document.getElementById("signupConfirm").value = "";
+
+    setTimeout(() => {
+      loginTab.click();
+    }, 700);
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = "Network error. Please try again.";
+    statusEl.classList.add("err");
+  }
+}
+
+
       return;
     }
     try {
@@ -1179,3 +1237,4 @@
 </script>
 </body>
 </html>
+
