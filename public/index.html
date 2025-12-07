@@ -2,1427 +2,1180 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CyberShield | Student Cyber Security Awareness</title>
+  <title>CyberShield EDU – Student Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --bg: #050816;  
-      --bg-light: #0f172a;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.1);
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --danger: #f97373;
-      --success: #22c55e;
-      --card-radius: 18px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.7);
-    }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+        Roboto, sans-serif;
     }
-
     body {
       min-height: 100vh;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
-      color: var(--text);
+      background: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
+      color: #e5e7eb;
       display: flex;
       align-items: stretch;
       justify-content: center;
-      transition: 0.25s;
     }
-
-    .app-container {
+    #app-root {
       width: 100%;
       max-width: 1200px;
-      margin: 24px;
-      display: flex;
-      border-radius: 30px;
+      margin: 16px;
+      border-radius: 18px;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.98));
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      transition: 0.25s;
+      background: radial-gradient(circle at top left, #020617, #020617 55%, #020617 100%);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 0 40px rgba(15, 23, 42, 0.9);
+      display: flex;
+      flex-direction: column;
     }
 
-    body.dashboard-mode .hero-pane {
-      display: none;
+    /* GLOBAL HEADER */
+
+    .global-header {
+      height: 56px;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, #020617, #020617 60%, #020617 100%);
+      border-bottom: 1px solid rgba(30, 64, 175, 0.7);
     }
-    body.dashboard-mode .app-container {
-      max-width: 1100px;
-      margin: 24px auto;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 2px solid #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #38bdf8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      background: radial-gradient(circle at top, #020617, #0b1120);
+    }
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brand-text span:first-child {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .brand-text span:last-child {
+      font-size: 11px;
+      opacity: 0.65;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      opacity: 0.75;
+    }
+    .header-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(129, 140, 248, 0.6);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #bfdbfe;
     }
 
-    .hero-pane {
-      flex: 1.1;
-      padding: 32px;
-      background: radial-gradient(circle at top left, #0f172a 0, #020617 45%, #000 100%);
-      border-right: 1px solid rgba(148, 163, 184, 0.25);
+    /* LAYOUT */
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 18px 20px 20px;
+      gap: 16px;
+    }
+
+    /* AUTH VIEW */
+
+    #auth-view {
+      display: flex;
+      gap: 20px;
+      flex: 1;
+    }
+    .auth-left {
+      flex: 1.2;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: radial-gradient(
+        circle at top left,
+        rgba(30, 64, 175, 0.6),
+        rgba(15, 23, 42, 0.98)
+      );
+      border: 1px solid rgba(129, 140, 248, 0.4);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
-
-    .logo {
+    .auth-heading {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 10px;
-      font-weight: 700;
-      font-size: 20px;
-      letter-spacing: 0.05em;
     }
-
-    .logo-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      border: 2px solid var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
-    }
-
-    .hero-main {
-      margin-top: 40px;
-    }
-
-    .tag {
+    .chip {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(22, 163, 74, 0.1);
+      color: #bbf7d0;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    .auth-heading h1 {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .auth-heading h1 span.safe {
+      color: #38bdf8;
+    }
+    .auth-heading p {
+      font-size: 13px;
+      opacity: 0.75;
+      max-width: 420px;
+    }
+    .auth-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .auth-badge {
       padding: 4px 10px;
       border-radius: 999px;
       font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      border: 1px solid rgba(56, 189, 248, 0.5);
-      background: rgba(15, 23, 42, 0.6);
-      color: var(--accent);
-    }
-
-    .tag-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.9);
-    }
-
-    .hero-title {
-      margin-top: 16px;
-      font-size: 32px;
-      line-height: 1.2;
-      font-weight: 700;
-    }
-
-    .hero-title span {
-      color: var(--accent);
-    }
-
-    .hero-subtitle {
-      margin-top: 10px;
-      font-size: 14px;
-      color: var(--muted);
-      max-width: 360px;
-      line-height: 1.5;
-    }
-
-    .hero-badges {
-      margin-top: 26px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .pill {
-      font-size: 11px;
-      padding: 5px 10px;
-      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.8);
       border: 1px solid rgba(148, 163, 184, 0.6);
-      color: var(--muted);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(15, 23, 42, 0.7);
+      color: #e5e7eb;
     }
-
-    .pill-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: rgba(56, 189, 248, 0.7);
-    }
-
-    .hero-footer {
-      margin-top: 40px;
+    .auth-footer {
       font-size: 11px;
-      color: var(--muted);
+      opacity: 0.7;
+      margin-top: 16px;
+    }
+
+    .auth-right {
+      flex: 1;
+      padding: 16px 16px;
+      border-radius: 16px;
+      background: radial-gradient(circle at top right, #020617, #020617 65%, #000 100%);
+      border: 1px solid rgba(55, 65, 81, 0.8);
+      display: flex;
+      flex-direction: column;
+    }
+    .auth-toggle {
+      display: flex;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      padding: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      margin-bottom: 14px;
+    }
+    .auth-toggle button {
+      flex: 1;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      font-size: 13px;
+      padding: 6px 0;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .auth-toggle button.active {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
+    }
+    .auth-title {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .auth-subtitle {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-bottom: 14px;
+    }
+    .field {
+      margin-bottom: 10px;
+    }
+    .field label {
+      font-size: 12px;
+      opacity: 0.85;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .field input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      font-size: 13px;
+    }
+    .field input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
+    }
+    .primary-btn {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #020617;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 4px;
+      box-shadow: 0 18px 35px rgba(56, 189, 248, 0.4);
+    }
+    .auth-note {
+      font-size: 10px;
+      opacity: 0.65;
+      margin-top: 10px;
+    }
+    .status {
+      font-size: 11px;
+      margin-top: 8px;
+      min-height: 16px;
+    }
+    .status.ok {
+      color: #4ade80;
+    }
+    .status.err {
+      color: #fb7185;
+    }
+
+    /* DASHBOARD VIEW */
+
+    #app-view {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .app-top {
       display: flex;
       justify-content: space-between;
       gap: 12px;
       flex-wrap: wrap;
     }
-
-    .hero-footer span {
-      opacity: 0.85;
-    }
-
-    .main-pane {
-      flex: 1.1;
-      padding: 28px;
+    .app-top-left {
       display: flex;
       flex-direction: column;
+      gap: 6px;
     }
-
-    .auth-card {
-      margin: auto;
-      max-width: 380px;
-      width: 100%;
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
-      padding: 24px 22px 22px 22px;
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .auth-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .auth-title {
-      font-size: 20px;
+    .welcome-text {
+      font-size: 18px;
       font-weight: 600;
     }
-
-    .auth-subtitle {
-      font-size: 11px;
-      color: var(--muted);
+    .welcome-text span {
+      color: #38bdf8;
     }
-
-    .auth-tabs {
-      display: flex;
-      margin-bottom: 18px;
-      padding: 3px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-    }
-
-    .auth-tab {
-      flex: 1;
-      padding: 6px 0;
+    .welcome-sub {
       font-size: 12px;
-      border-radius: 999px;
-      text-align: center;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      transition: 0.18s;
+      opacity: 0.7;
     }
 
-    .auth-tab.active {
-      background: radial-gradient(circle at top left, #38bdf8, #0ea5e9);
-      color: #0f172a;
-      font-weight: 600;
-      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
-    }
-
-    form {
-      margin-top: 12px;
+    .app-nav {
+      margin-top: 8px;
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    label {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    input {
-      padding: 8px 9px;
-      border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text);
-      font-size: 13px;
-      outline: none;
-      transition: 0.18s;
-    }
-
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
-    }
-
-    .hint {
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .btn-primary {
-      margin-top: 6px;
-      padding: 8px 0;
-      border-radius: 12px;
-      border: none;
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      color: #0b1220;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-      box-shadow: 0 14px 30px rgba(56, 189, 248, 0.5);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .btn-primary:active {
-      transform: translateY(1px);
-      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.4);
-    }
-
-    .error-text {
-      font-size: 11px;
-      color: var(--danger);
-      min-height: 16px;
-      margin-top: 4px;
-    }
-
-    .success-text {
-      font-size: 11px;
-      color: var(--success);
-      min-height: 16px;
-      margin-top: 4px;
-    }
-
-    .info-note {
-      margin-top: 10px;
-      font-size: 10px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
-
-    /* DASHBOARD */
-
-    .dashboard {
-      display: none;
-      flex: 1;
-      flex-direction: column;
-      height: 100%;
-    }
-
-    .dash-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
-    }
-
-    .dash-title {
-      font-size: 20px;
-      font-weight: 600;
-    }
-
-    .dash-title span {
-      color: var(--accent);
-    }
-
-    .dash-subtitle {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .user-chip {
-      display: inline-flex;
-      align-items: center;
       gap: 8px;
-      padding: 6px 11px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.9);
-      font-size: 11px;
-    }
-
-    .user-avatar {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #38bdf8, #0f172a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .logout-btn {
-      border: none;
-      background: transparent;
-      font-size: 11px;
-      color: var(--muted);
-      cursor: pointer;
-      margin-left: 4px;
-      text-decoration: underline;
-      text-decoration-style: dotted;
-    }
-
-    .dash-nav {
-      display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 12px;
     }
-
     .nav-btn {
+      padding: 7px 14px;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.9);
-      padding: 5px 10px;
+      background: rgba(15, 23, 42, 0.95);
+      color: #e5e7eb;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav-btn.active {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.7);
+    }
+
+    .app-streak {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .badge-card {
+      min-width: 150px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), #020617);
+      border: 1px solid rgba(129, 140, 248, 0.7);
       font-size: 11px;
-      color: var(--muted);
+    }
+    .badge-card h4 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      opacity: 0.8;
+      margin-bottom: 2px;
+    }
+    .badge-card strong {
+      font-size: 14px;
+    }
+    .badge-card small {
+      font-size: 10px;
+      opacity: 0.7;
+      display: block;
+      margin-top: 2px;
+    }
+    .logout-btn {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(248, 250, 252, 0.5);
+      background: transparent;
+      color: #e5e7eb;
+      font-size: 11px;
       cursor: pointer;
     }
 
-    .nav-btn.nav-active {
-      border-color: var(--accent);
-      color: #e0f2fe;
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
-      background: rgba(15, 23, 42, 0.95);
-    }
+    /* APP CONTENT */
 
-    .dash-grid {
-      display: grid;
-      grid-template-columns: 2fr 1.5fr;
+    .app-content {
+      display: flex;
       gap: 14px;
       flex: 1;
-      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .app-column {
+      flex: 1;
+      min-width: 260px;
     }
 
     .card {
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
-      border-radius: 16px;
-      padding: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-height: 120px;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), #020617);
+      border-radius: 14px;
+      border: 1px solid rgba(75, 85, 99, 0.9);
+      padding: 12px 14px;
+      box-shadow: 0 0 22px rgba(15, 23, 42, 0.95);
     }
-
-    .card:hover {
-      border-color: rgba(56, 189, 248, 0.6);
-      box-shadow: 0 0 24px rgba(56, 189, 248, 0.24);
-      transform: translateY(-1px);
-    }
-
-    #card-quizzes:hover {
-      border-color: rgba(56, 189, 248, 0.95);
-      box-shadow: 0 0 32px rgba(56, 189, 248, 0.45);
-    }
-
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      margin-bottom: 6px;
     }
-
-    .card-title {
-      font-size: 13px;
+    .card-header h2 {
+      font-size: 14px;
       font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
-
-    .card-badge {
-      font-size: 10px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.6);
-      color: var(--accent);
-      background: rgba(15, 23, 42, 0.7);
-    }
-
-    .card-content {
+    .card-header span {
       font-size: 11px;
-      color: var(--muted);
-      line-height: 1.5;
+      opacity: 0.7;
     }
-
-    .tip-highlight {
-      padding: 7px 8px;
+    .lesson-highlight {
+      margin-top: 4px;
+      padding: 8px 9px;
+      border-radius: 12px;
+      background: radial-gradient(circle at top left, rgba(8, 47, 73, 0.9), #020617);
+      border: 1px solid rgba(59, 130, 246, 0.7);
+    }
+    .lesson-highlight-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+    .lesson-highlight-body {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    .lesson-list {
+      margin-top: 8px;
+      max-height: 230px;
+      overflow: auto;
+    }
+    .lesson-item {
+      padding: 6px 6px;
       border-radius: 10px;
-      background: var(--accent-soft);
-      border: 1px dashed rgba(56, 189, 248, 0.5);
-      font-size: 11px;
-      color: #e0f2fe;
+      border: 1px solid rgba(31, 41, 55, 0.95);
+      background: rgba(15, 23, 42, 0.95);
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    .lesson-item-title {
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+    .lesson-item-meta {
+      font-size: 10px;
+      opacity: 0.6;
+      margin-top: 2px;
     }
 
-    .badge-soft {
-      display: inline-block;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
+    .info-note {
+      font-size: 11px;
+      opacity: 0.8;
       margin-top: 4px;
     }
 
-    .card-list {
-      margin-top: 2px;
-      padding-left: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    /* QUIZ VIEW */
 
-    .card-list li {
-      font-size: 11px;
-      color: var(--muted);
+    #quiz-view {
+      margin-top: 10px;
     }
-
-    .update-item {
-      font-size: 11px;
-      padding: 6px 7px;
-      border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
-      margin-bottom: 6px;
-    }
-
-    .update-title {
-      font-weight: 600;
-      margin-bottom: 2px;
-      font-size: 11px;
-    }
-
-    .update-meta {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .quiz-list {
-      display: none; /* not using titles list now */
-    }
-
-    .quiz-option {
-      margin-top: 5px;
-      padding: 7px 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      font-size: 11px;
-      cursor: pointer;
-      transition: 0.18s;
-      background: rgba(15, 23, 42, 0.9);
-    }
-
-    .quiz-option:hover {
-      border-color: var(--accent);
-      transform: translateY(-1px);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
-    }
-
-    .quiz-option.correct {
-      border-color: var(--success);
-      background: rgba(34, 197, 94, 0.12);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
-      animation: pulseGreen 0.5s ease-out;
-    }
-
-    .quiz-option.wrong {
-      border-color: var(--danger);
-      background: rgba(248, 113, 113, 0.06);
-      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.5);
-      animation: pulseRed 0.4s ease-out;
-    }
-
-    @keyframes pulseGreen {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes pulseRed {
-      0% { transform: scale(1); }
-      50% { transform: scale(0.98); }
-      100% { transform: scale(1); }
-    }
-
-    .quiz-footer {
-      margin-top: 6px;
+    .quiz-header-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .quiz-next-btn {
-      font-size: 10px;
-      border-radius: 999px;
-      padding: 4px 10px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--text);
-      cursor: pointer;
-    }
-
-    /* checklist */
-    .checklist-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
+      gap: 8px;
       margin-bottom: 4px;
-      font-size: 11px;
-      color: var(--muted);
     }
-    .checklist-item input {
-      margin-top: 2px;
+    .quiz-header-row h2 {
+      font-size: 14px;
+      font-weight: 600;
     }
-    .checklist-note {
+    .pill {
+      padding: 3px 8px;
+      border-radius: 999px;
       font-size: 10px;
-      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: rgba(34, 197, 94, 0.15);
+      color: #bbf7d0;
+    }
+    .quiz-card {
+      margin-top: 6px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), #020617);
+      box-shadow: 0 0 18px rgba(15, 23, 42, 0.9);
+    }
+    .quiz-meta {
+      font-size: 11px;
+      opacity: 0.75;
+      margin-bottom: 4px;
+    }
+    .quiz-question {
+      font-size: 13px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .quiz-option {
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.95);
+      font-size: 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+    }
+    .quiz-option:hover {
+      box-shadow: 0 0 14px rgba(148, 163, 184, 0.5);
+      transform: translateY(-1px);
+    }
+    .quiz-option.correct {
+      border-color: #22c55e;
+      background: rgba(22, 163, 74, 0.18);
+      box-shadow: 0 0 18px rgba(34, 197, 94, 0.8);
+    }
+    .quiz-option.wrong {
+      border-color: #fb7185;
+      background: rgba(248, 113, 113, 0.15);
+      box-shadow: 0 0 18px rgba(248, 113, 113, 0.7);
+    }
+    .quiz-feedback {
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .quiz-feedback.ok {
+      color: #4ade80;
+    }
+    .quiz-feedback.err {
+      color: #fb7185;
+    }
+    .quiz-solution {
+      font-size: 11px;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+    .quiz-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
       margin-top: 4px;
     }
-
-    @media (max-width: 960px) {
-      .app-container {
-        flex-direction: column;
-        margin: 12px;
-      }
-      .hero-pane {
-        border-right: none;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-      }
-      .dash-grid {
-        grid-template-columns: 1fr;
-      }
+    .quiz-controls button {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.96);
+      color: #e5e7eb;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .quiz-controls button.primary {
+      border: none;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.7);
     }
 
-    @media (max-width: 640px) {
-      .hero-pane {
-        display: none;
+    .muted-hint {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 900px) {
+      #auth-view {
+        flex-direction: column;
       }
-      .app-container {
-        margin: 0;
-        border-radius: 0;
+      .auth-left,
+      .auth-right {
+        min-height: 0;
       }
-      .main-pane {
-        padding: 18px;
+    }
+    @media (max-width: 720px) {
+      .app-content {
+        flex-direction: column;
       }
-      .auth-card {
-        box-shadow: none;
-        border-radius: 20px;
+      .app-top {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-  <div class="app-container">
-    <!-- LEFT HERO -->
-    <div class="hero-pane">
-      <div>
-        <div class="logo">
-          <div class="logo-mark">🔒</div>
-          <div>CyberShield EDU</div>
-        </div>
+<div id="app-root">
+  <!-- GLOBAL HEADER -->
+  <header class="global-header">
+    <div class="brand">
+      <div class="brand-logo">CS</div>
+      <div class="brand-text">
+        <span>CYBERSHIELD EDU</span>
+        <span>Student cyber safety tool</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-pill">Awareness • Practice • Habit</div>
+    </div>
+  </header>
 
-        <div class="hero-main">
-          <div class="tag">
-            <span class="tag-dot"></span> Student Cyber Safety Hub
+  <main class="main">
+    <!-- AUTH VIEW -->
+    <section id="auth-view">
+      <div class="auth-left">
+        <div class="auth-heading">
+          <div class="chip">
+            <span class="chip-dot"></span>
+            STUDENT CYBER SAFETY HUB
           </div>
-          <h1 class="hero-title">
-            Learn to stay <span>safe</span><br />on the internet.
+          <h1>
+            Learn to stay <span class="safe">safe</span><br />
+            on the internet.
           </h1>
-          <p class="hero-subtitle">
-            Learn how to avoid scams, protect your accounts, and stay safe on social media and public networks.
+          <p>
+            CyberShield EDU helps you recognise scams, protect your accounts and build
+            strong digital habits with short lessons and interactive quizzes.
           </p>
-
-          <div class="hero-badges">
-            <div class="pill"><span class="pill-dot"></span> Phishing & scams</div>
-            <div class="pill"><span class="pill-dot"></span> Strong passwords</div>
-            <div class="pill"><span class="pill-dot"></span> Social media safety</div>
-            <div class="pill"><span class="pill-dot"></span> Digital footprint</div>
+          <div class="auth-badges">
+            <div class="auth-badge">Phishing & UPI scams</div>
+            <div class="auth-badge">Strong passwords</div>
+            <div class="auth-badge">Social media privacy</div>
+            <div class="auth-badge">Daily streak & rewards</div>
           </div>
+        </div>
+        <div class="auth-footer">
+          Designed for students to learn cyber security in a practical way – not just theory.
         </div>
       </div>
 
-      <div class="hero-footer">
-        <span>Designed for schools and colleges.</span>
-        <span>Login to receive regular cyber security guidance.</span>
-      </div>
-    </div>
+      <div class="auth-right">
+        <div class="auth-toggle">
+          <button id="loginTab" class="active">Login</button>
+          <button id="signupTab">Sign up</button>
+        </div>
 
-    <!-- RIGHT SIDE -->
-    <div class="main-pane">
-      <!-- AUTH SECTION -->
-      <div id="auth-section">
-        <div class="auth-card">
-          <div class="auth-header">
-            <div>
-              <div class="auth-title" id="auth-title">Welcome back 👋</div>
-              <div class="auth-subtitle" id="auth-subtitle">
-                Login to access your cyber safety dashboard.
+        <!-- LOGIN FORM -->
+        <div id="loginForm">
+          <div class="auth-title">Welcome back 👋</div>
+          <div class="auth-subtitle">Use the same email and password to access your dashboard.</div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" />
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="password" id="loginPassword" placeholder="Your password" />
+          </div>
+          <button class="primary-btn" id="loginBtn">Login</button>
+          <div id="loginStatus" class="status"></div>
+          <div class="auth-note">
+            This app is for cyber security awareness only. We never ask for OTP, PIN or bank details.
+          </div>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="signupForm" style="display:none;">
+          <div class="auth-title">Create your CyberShield account</div>
+          <div class="auth-subtitle">It takes less than a minute to start your safety journey.</div>
+          <div class="field">
+            <label>Name</label>
+            <input type="text" id="signupName" placeholder="Full name" />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="signupEmail" placeholder="you@example.com" />
+          </div>
+          <div class="field">
+            <label>Create password</label>
+            <input type="password" id="signupPassword" placeholder="Minimum 6 characters" />
+          </div>
+          <div class="field">
+            <label>Confirm password</label>
+            <input type="password" id="signupConfirm" placeholder="Re-enter password" />
+          </div>
+          <button class="primary-btn" id="signupBtn">Create account</button>
+          <div id="signupStatus" class="status"></div>
+          <div class="auth-note">
+            Use a strong password here and avoid reusing the same password on other websites.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APP VIEW -->
+    <section id="app-view">
+      <div class="app-top">
+        <div class="app-top-left">
+          <div class="welcome-text">
+            Welcome, <span id="studentName"></span> 👋
+          </div>
+          <div class="welcome-sub">
+            Choose an action below. Start with short lessons, then test yourself with quizzes.
+          </div>
+          <div class="app-nav">
+            <button class="nav-btn active" id="nav-lessons">Learn lessons</button>
+            <button class="nav-btn" id="nav-quizzes">Take quizzes</button>
+          </div>
+        </div>
+        <div class="app-streak">
+          <div class="badge-card">
+            <h4>Daily streak</h4>
+            <strong><span id="streakDays">0</span> days</strong>
+            <small>Longest: <span id="streakLongest">0</span> days</small>
+          </div>
+          <div class="badge-card">
+            <h4>Points & level</h4>
+            <strong><span id="streakPoints">0</span> pts</strong>
+            <small id="streakLevel">New learner</small>
+          </div>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+
+      <div class="app-content">
+        <!-- Lessons column -->
+        <div class="app-column">
+          <div class="card">
+            <div class="card-header">
+              <h2>Today’s highlight</h2>
+              <span>Short safety tip</span>
+            </div>
+            <div id="highlightBox" class="lesson-highlight">
+              <div class="lesson-highlight-title">Loading tips...</div>
+              <div class="lesson-highlight-body">
+                Please wait while we fetch the latest cyber safety update.
+              </div>
+            </div>
+            <div class="info-note">
+              These tips are posted by your admin. Refresh later to see new updates.
+            </div>
+          </div>
+
+          <div style="height:10px;"></div>
+
+          <div class="card" id="lessonsCard">
+            <div class="card-header">
+              <h2>All lessons</h2>
+              <span>Daily cyber safety feed</span>
+            </div>
+            <div id="lessonList" class="lesson-list">
+              <div class="lesson-item">
+                <div class="lesson-item-title">Loading updates...</div>
               </div>
             </div>
           </div>
-
-          <div class="auth-tabs">
-            <button class="auth-tab active" id="login-tab">Login</button>
-            <button class="auth-tab" id="signup-tab">Sign up</button>
-          </div>
-
-          <!-- LOGIN FORM -->
-          <form id="login-form">
-            <div class="field">
-              <label for="login-email">Email</label>
-              <input
-                type="email"
-                id="login-email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="login-password">Password</label>
-              <input
-                type="password"
-                id="login-password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-
-            <button type="submit" class="btn-primary">Login</button>
-            <div id="login-message" class="error-text"></div>
-
-            <p class="info-note">
-              Use the same email and password each time to keep your learning history consistent.
-            </p>
-          </form>
-
-          <!-- SIGNUP FORM -->
-          <form id="signup-form" style="display: none">
-            <div class="field">
-              <label for="signup-name">Full Name</label>
-              <input
-                type="text"
-                id="signup-name"
-                placeholder="E.g., Priya Sharma"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="signup-email">Email</label>
-              <input
-                type="email"
-                id="signup-email"
-                placeholder="yourname@gmail.com"
-                required
-              />
-              <span class="hint">Use the email where you want to receive cyber safety updates.</span>
-            </div>
-
-            <div class="field">
-              <label for="signup-phone">Phone Number</label>
-              <input
-                type="tel"
-                id="signup-phone"
-                placeholder="10-digit mobile number"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="signup-password">Create Password</label>
-              <input
-                type="password"
-                id="signup-password"
-                placeholder="Minimum 6 characters"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="signup-confirm">Confirm Password</label>
-              <input
-                type="password"
-                id="signup-confirm"
-                placeholder="Re-enter password"
-                required
-              />
-            </div>
-
-            <button type="submit" class="btn-primary">Create account</button>
-            <div id="signup-message" class="success-text"></div>
-
-            <p class="info-note">
-              This account is only for cyber security learning and awareness activities.
-            </p>
-          </form>
-        </div>
-      </div>
-
-      <!-- DASHBOARD SECTION -->
-      <div id="dashboard" class="dashboard">
-        <div class="dash-header">
-          <div>
-            <div class="dash-title">
-              Hi, <span id="user-name-display"></span> 👋
-            </div>
-            <div class="dash-subtitle">
-              Use the sections below to learn, attempt quizzes and build strong cyber habits.
-            </div>
-          </div>
-          <div class="user-chip">
-            <div class="user-avatar" id="user-avatar">U</div>
-            <div>
-              <div id="user-email-display" style="font-size: 11px"></div>
-              <button class="logout-btn" id="logout-btn">Logout</button>
-            </div>
-          </div>
         </div>
 
-        <div class="dash-nav">
-          <button class="nav-btn nav-active" data-target="overview">Overview</button>
-          <button class="nav-btn" data-target="lessons">Learn lessons</button>
-          <button class="nav-btn" data-target="quizzes">Quizzes</button>
-          <button class="nav-btn" data-target="attacks">Common attacks</button>
-        </div>
-
-        <div class="dash-grid">
-          <!-- Highlight -->
-          <div class="card" id="card-highlight">
+        <!-- Quiz column -->
+        <div class="app-column">
+          <div class="card" id="quizIntroCard">
             <div class="card-header">
-              <div class="card-title">
-                🔐 Highlight of the day
-              </div>
-              <div class="card-badge" id="tip-badge">Tip</div>
+              <h2>Quiz practice</h2>
+              <span>Check your awareness</span>
             </div>
-            <div class="card-content">
-              <p class="tip-highlight" id="tip-text">
-                Loading...
-              </p>
-              <p style="margin-top: 6px">
-                Review this whenever you log in. One small step each day keeps your accounts safer.
-              </p>
-            </div>
+            <p class="info-note">
+              Click the button below to open quiz mode. Questions will appear
+              one by one with instant feedback and explanations.
+            </p>
+            <button class="primary-btn" id="openQuizBtn" style="margin-top:10px;">
+              Open quiz practice
+            </button>
+            <p class="muted-hint">
+              You can hide quiz mode anytime and come back to lessons.
+            </p>
           </div>
 
-          <!-- Streak & rewards -->
-          <div class="card" id="card-streak">
-            <div class="card-header">
-              <div class="card-title">🔥 Your learning streak</div>
-              <div class="card-badge" id="streak-level">New learner</div>
-            </div>
-            <div class="card-content">
-              <p>
-                Current streak: <strong><span id="streak-days">0</span> day(s)</strong><br />
-                Longest streak: <strong><span id="streak-best">0</span> day(s)</strong><br />
-                Total points: <strong><span id="streak-points">0</span></strong>
-              </p>
-              <p style="margin-top: 6px" id="streak-message">
-                Open CyberShield daily to grow your streak and unlock higher levels.
-              </p>
-              <span class="badge-soft">
-                Daily login: +10 pts · Quiz correct: bonus points · Milestones unlock higher titles
+          <div id="quiz-view" style="display:none;">
+            <div class="quiz-header-row">
+              <h2>Quiz mode</h2>
+              <span class="pill">
+                <span id="quizIndexLabel">Question 1</span>
               </span>
             </div>
-          </div>
-
-          <!-- Lessons / updates -->
-          <div class="card" id="card-lessons">
-            <div class="card-header">
-              <div class="card-title">📚 Learn lessons & updates</div>
-            </div>
-            <div class="card-content" id="updates-list">
-            </div>
-          </div>
-
-          <!-- Common attacks -->
-          <div class="card" id="card-attacks">
-            <div class="card-header">
-              <div class="card-title">⚠️ Common online risks for students</div>
-              <div class="card-badge">Awareness</div>
-            </div>
-            <div class="card-content">
-              <ul class="card-list">
-                <li>
-                  <strong>Phishing messages:</strong> Fake mails or messages pretending to be from college, bank or teachers asking for passwords or OTPs.
-                </li>
-                <li>
-                  <strong>Free Wi-Fi traps:</strong> Attackers capturing usernames and passwords on open networks.
-                </li>
-                <li>
-                  <strong>Fake job / internship offers:</strong> Asking for money or personal details in the name of registration or verification.
-                </li>
-                <li>
-                  <strong>Account takeover:</strong> Weak passwords and reused passwords between apps making it easy to break in.
-                </li>
-              </ul>
-              <span class="badge-soft">
-                If a message feels urgent, emotional and asks for money or data, pause and verify before you react.
-              </span>
-            </div>
-          </div>
-
-          <!-- Personal security checklist -->
-          <div class="card" id="card-checklist">
-            <div class="card-header">
-              <div class="card-title">🛡️ Personal security checklist</div>
-              <div class="card-badge">Habits</div>
-            </div>
-            <div class="card-content" id="checklist-content">
-              <div class="checklist-item">
-                <input type="checkbox" data-key="2fa_email" />
-                <span>I have turned on 2-step verification (OTP / app) for my main email account.</span>
+            <div class="quiz-card">
+              <div class="quiz-meta">
+                Answer honestly. We show you the correct behaviour with explanation.
               </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="strong_passwords" />
-                <span>I use strong & unique passwords for important accounts (email, banking, UPI).</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="no_otp_share" />
-                <span>I never share passwords or OTPs with anyone, even if they say they are from bank / company support.</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="public_wifi_care" />
-                <span>I avoid logging into banking / UPI apps on public or unknown Wi-Fi networks.</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="privacy_settings" />
-                <span>I regularly check privacy settings of my social media accounts.</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="verify_links" />
-                <span>I always verify links and senders before clicking on unexpected attachments or “payment” links.</span>
-              </div>
-              <div class="checklist-note">
-                These items are stored only in your browser for your account and help you track how safe your habits are.
+              <div id="quizQuestion" class="quiz-question"></div>
+              <div id="quizOptions" class="quiz-options"></div>
+              <div id="quizFeedback" class="quiz-feedback"></div>
+              <div id="quizSolution" class="quiz-solution"></div>
+              <div class="quiz-controls">
+                <button id="hideQuizBtn">Hide quiz</button>
+                <button id="nextQuizBtn" class="primary">Next question</button>
               </div>
             </div>
-          </div>
-
-          <!-- Quizzes -->
-          <div class="card" id="card-quizzes">
-            <div class="card-header">
-              <div class="card-title">✅ Cyber quiz zone</div>
-              <div class="card-badge" id="quiz-progress">Press button</div>
-            </div>
-            <div class="card-content">
-              <button id="load-quizzes-btn" class="quiz-next-btn" style="margin-bottom:6px;">
-                Show quizzes
-              </button>
-              <div class="quiz-list" id="quiz-list"></div>
-              <div id="quiz-question-area"></div>
-              <div class="quiz-footer">
-                <span id="quiz-feedback">Click “Show quizzes” to begin.</span>
-                <button class="quiz-next-btn" id="quiz-next-btn">Next quiz</button>
-              </div>
-            </div>
+            <p class="muted-hint">
+              Correct answers give you more points. Wrong answers still teach you the safe option.
+            </p>
           </div>
         </div>
       </div>
-      <!-- END DASHBOARD -->
-    </div>
-  </div>
+    </section>
+  </main>
+</div>
 
-  <script>
-    const API_BASE = "/api";
+<script>
+  const API_BASE = "/api"; // backend base path
 
-    let currentUser = null;
-    let quizzes = [];
-    let currentQuizIndex = 0;
+  let currentUser = null;
+  let allUpdates = [];
+  let quizzes = [];
+  let currentQuizIndex = 0;
+  let hasAnsweredCurrent = false;
 
-    // Auth elements
-    const loginTab = document.getElementById("login-tab");
-    const signupTab = document.getElementById("signup-tab");
-    const loginForm = document.getElementById("login-form");
-    const signupForm = document.getElementById("signup-form");
-    const authTitle = document.getElementById("auth-title");
-    const authSubtitle = document.getElementById("auth-subtitle");
-    const loginMessage = document.getElementById("login-message");
-    const signupMessage = document.getElementById("signup-message");
-    const authSection = document.getElementById("auth-section");
-    const dashboard = document.getElementById("dashboard");
+  const loginTab = document.getElementById("loginTab");
+  const signupTab = document.getElementById("signupTab");
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  const authView = document.getElementById("auth-view");
+  const appView = document.getElementById("app-view");
 
-    // Dashboard header
-    const userNameDisplay = document.getElementById("user-name-display");
-    const userEmailDisplay = document.getElementById("user-email-display");
-    const userAvatar = document.getElementById("user-avatar");
-    const logoutBtn = document.getElementById("logout-btn");
+  loginTab.onclick = () => {
+    loginTab.classList.add("active");
+    signupTab.classList.remove("active");
+    loginForm.style.display = "";
+    signupForm.style.display = "none";
+  };
+  signupTab.onclick = () => {
+    signupTab.classList.add("active");
+    loginTab.classList.remove("active");
+    signupForm.style.display = "";
+    loginForm.style.display = "none";
+  };
 
-    // Nav
-    const navButtons = document.querySelectorAll(".nav-btn");
+  async function signup() {
+    const name = document.getElementById("signupName").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value;
+    const confirm = document.getElementById("signupConfirm").value;
+    const statusEl = document.getElementById("signupStatus");
+    statusEl.textContent = "";
+    statusEl.className = "status";
 
-    // Highlight / updates
-    const tipText = document.getElementById("tip-text");
-    const tipBadge = document.getElementById("tip-badge");
-    const updatesList = document.getElementById("updates-list");
-
-    // Streak
-    const streakLevelEl = document.getElementById("streak-level");
-    const streakDaysEl = document.getElementById("streak-days");
-    const streakBestEl = document.getElementById("streak-best");
-    const streakPointsEl = document.getElementById("streak-points");
-    const streakMessageEl = document.getElementById("streak-message");
-
-    // Checklist
-    const checklistContent = document.getElementById("checklist-content");
-
-    // Quizzes
-    const quizListEl = document.getElementById("quiz-list");
-    const quizArea = document.getElementById("quiz-question-area");
-    const quizFeedback = document.getElementById("quiz-feedback");
-    const quizProgress = document.getElementById("quiz-progress");
-    const quizNextBtn = document.getElementById("quiz-next-btn");
-    const loadQuizzesBtn = document.getElementById("load-quizzes-btn");
-
-    // Login/Signup tabs
-    loginTab.addEventListener("click", () => {
-      loginTab.classList.add("active");
-      signupTab.classList.remove("active");
-      loginForm.style.display = "flex";
-      signupForm.style.display = "none";
-      authTitle.textContent = "Welcome back 👋";
-      authSubtitle.textContent = "Login to access your cyber safety dashboard.";
-      loginMessage.textContent = "";
-      signupMessage.textContent = "";
-    });
-
-    signupTab.addEventListener("click", () => {
-      signupTab.classList.add("active");
-      loginTab.classList.remove("active");
-      loginForm.style.display = "none";
-      signupForm.style.display = "flex";
-      authTitle.textContent = "Create your CyberShield account 🛡️";
-      authSubtitle.textContent = "Sign up to receive cyber security guidance.";
-      loginMessage.textContent = "";
-      signupMessage.textContent = "";
-    });
-
-    // Signup
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById("signup-name").value.trim();
-      const email = document.getElementById("signup-email").value.trim().toLowerCase();
-      const phone = document.getElementById("signup-phone").value.trim();
-      const password = document.getElementById("signup-password").value;
-      const confirm = document.getElementById("signup-confirm").value;
-
-      signupMessage.className = "error-text";
-      signupMessage.textContent = "";
-
-      if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
-        signupMessage.textContent = "Please enter a valid email address.";
-        return;
-      }
-      if (!/^[0-9]{10}$/.test(phone)) {
-        signupMessage.textContent = "Phone number should be 10 digits.";
-        return;
-      }
-      if (password.length < 6) {
-        signupMessage.textContent = "Password should be at least 6 characters.";
-        return;
-      }
-      if (password !== confirm) {
-        signupMessage.textContent = "Passwords do not match.";
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API_BASE}/signup`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, phone, password }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          signupMessage.textContent = data.message || "Signup failed.";
-          return;
-        }
-
-        signupMessage.className = "success-text";
-        signupMessage.textContent = "Account created. Opening dashboard...";
-        setTimeout(() => {
-          loadDashboard(data.user);
-          startActivity(data.user);
-          pingStreak(data.user);
-        }, 800);
-      } catch (err) {
-        console.error(err);
-        signupMessage.textContent = "Network error. Check if backend is running.";
-      }
-    });
-
-    // Login
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById("login-email").value.trim().toLowerCase();
-      const password = document.getElementById("login-password").value;
-
-      loginMessage.textContent = "";
-
-      try {
-        const res = await fetch(`${API_BASE}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          loginMessage.textContent = data.message || "Login failed.";
-          return;
-        }
-
-        loadDashboard(data.user);
-        startActivity(data.user);
-        pingStreak(data.user);
-      } catch (err) {
-        console.error(err);
-        loginMessage.textContent = "Network error. Check if backend is running.";
-      }
-    });
-
-    // Logout
-    logoutBtn.addEventListener("click", () => {
-      stopActivity();
-      currentUser = null;
-      document.body.classList.remove("dashboard-mode");
-      dashboard.style.display = "none";
-      authSection.style.display = "block";
-      loginTab.click();
-    });
-
-    // Activity tracking
-    async function startActivity(user) {
-      currentUser = user;
-      try {
-        await fetch(`${API_BASE}/activity/start`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: user.email, name: user.name }),
-        });
-      } catch (err) {
-        console.error("activity start error", err);
-      }
+    if (!name || !email || !password || !confirm) {
+      statusEl.textContent = "Please fill all fields.";
+      statusEl.classList.add("err");
+      return;
     }
-
-    async function stopActivity() {
-      if (!currentUser) return;
-      try {
-        await fetch(`${API_BASE}/activity/stop`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: currentUser.email }),
-        });
-      } catch (err) {
-        console.error("activity stop error", err);
-      }
+    if (password !== confirm) {
+      statusEl.textContent = "Passwords do not match.";
+      statusEl.classList.add("err");
+      return;
     }
-
-    window.addEventListener("beforeunload", () => {
-      if (!currentUser) return;
-      try {
-        navigator.sendBeacon(
-          `${API_BASE}/activity/stop`,
-          new Blob([JSON.stringify({ email: currentUser.email })], {
-            type: "application/json",
-          })
-        );
-      } catch (_) {}
-    });
-
-    // Streak ping
-    async function pingStreak(user) {
-      const u = user || currentUser;
-      if (!u) return;
-      try {
-        const res = await fetch(`${API_BASE}/streak/ping`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: u.email, name: u.name }),
-        });
-        const data = await res.json();
-        if (res.ok) {
-          updateStreakUI(data);
-        }
-      } catch (err) {
-        console.error("streak error", err);
-      }
-    }
-
-    function updateStreakUI(s) {
-      streakLevelEl.textContent = s.level || "New learner";
-      streakDaysEl.textContent = s.currentStreak || 0;
-      streakBestEl.textContent = s.longestStreak || 0;
-      streakPointsEl.textContent = s.points || 0;
-
-      let msg = "";
-      if (s.currentStreak === 0) {
-        msg = "Start your first streak by learning at least once today.";
-      } else if (s.currentStreak < 3) {
-        msg = "Great start. Keep coming back for the next few days to unlock your first bonus.";
-      } else if (s.currentStreak < 7) {
-        msg = "Nice. You are building a habit. Reach 7 days for a bigger bonus.";
-      } else if (s.currentStreak < 30) {
-        msg = "Strong streak. Try to maintain this and aim for a 30-day milestone.";
-      } else {
-        msg = "Excellent discipline. You are at a long streak, keep protecting your digital life.";
-      }
-      streakMessageEl.textContent = msg;
-    }
-
-    // Dashboard main load
-    function loadDashboard(user) {
-      document.body.classList.add("dashboard-mode");
-      currentUser = user;
-
-      userNameDisplay.textContent = user.name.split(" ")[0] || "Student";
-      userEmailDisplay.textContent = user.email;
-      userAvatar.textContent = (user.name[0] || "U").toUpperCase();
-
-      authSection.style.display = "none";
-      dashboard.style.display = "flex";
-
-      navButtons.forEach((btn) => btn.classList.remove("nav-active"));
-      navButtons[0].classList.add("nav-active");
-
-      loadUpdatesFromBackend();
-      loadChecklistForUser(user);
-
-      quizzes = [];
-      quizArea.innerHTML = "";
-      quizFeedback.textContent = "Click “Show quizzes” to load all available quizzes.";
-      quizProgress.textContent = "Press button";
-    }
-
-    // Nav scroll behaviour
-    navButtons.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        navButtons.forEach((b) => b.classList.remove("nav-active"));
-        btn.classList.add("nav-active");
-
-        const target = btn.dataset.target;
-        let el = null;
-        if (target === "overview") el = document.getElementById("card-highlight");
-        if (target === "lessons") el = document.getElementById("card-lessons");
-        if (target === "quizzes") el = document.getElementById("card-quizzes");
-        if (target === "attacks") el = document.getElementById("card-attacks");
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+    try {
+      const res = await fetch(`${API_BASE}/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
       });
-    });
-
-    // Updates
-    async function loadUpdatesFromBackend() {
-      updatesList.innerHTML = "Loading lessons and updates...";
-      tipText.textContent = "Loading...";
-      tipBadge.textContent = "Tip";
-
-      try {
-        const res = await fetch(`${API_BASE}/updates`);
-        const data = await res.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
-          updatesList.innerHTML = "No updates available yet.";
-          tipText.textContent = "New guidance will appear here.";
-          return;
-        }
-
-        const first = data[0];
-        tipText.textContent = first.summary;
-        tipBadge.textContent = first.label || "Tip";
-
-        updatesList.innerHTML = "";
-        data.forEach((item) => {
-          const div = document.createElement("div");
-          div.className = "update-item";
-          const date = new Date(item.createdAt);
-          const meta = isNaN(date.getTime())
-            ? item.label || "Update"
-            : `${date.toLocaleDateString()} · ${item.label || "Update"}`;
-
-          div.innerHTML = `
-            <div class="update-title">${item.title}</div>
-            <div>${item.summary}</div>
-            <div class="update-meta">${meta}</div>
-          `;
-          updatesList.appendChild(div);
-        });
-      } catch (err) {
-        console.error(err);
-        updatesList.innerHTML = "Unable to load updates.";
-        tipText.textContent = "Unable to load highlight.";
-      }
-    }
-
-    // Checklist – per user localStorage
-    function loadChecklistForUser(user) {
-      const email = user.email.toLowerCase();
-      const key = `cybershield_checklist_${email}`;
-      let saved = {};
-      try {
-        const raw = localStorage.getItem(key);
-        if (raw) saved = JSON.parse(raw);
-      } catch (_) {}
-
-      const checkboxes = checklistContent.querySelectorAll("input[type='checkbox'][data-key]");
-      checkboxes.forEach((cb) => {
-        const k = cb.getAttribute("data-key");
-        cb.checked = !!saved[k];
-        cb.onchange = () => {
-          saved[k] = cb.checked;
-          localStorage.setItem(key, JSON.stringify(saved));
-        };
-      });
-    }
-
-    // Quizzes
-    loadQuizzesBtn.addEventListener("click", () => {
-      loadQuizzesFromBackend();
-    });
-
-    async function loadQuizzesFromBackend() {
-      quizArea.innerHTML = "";
-      quizFeedback.textContent = "Loading quiz list...";
-      quizProgress.textContent = "Loading";
-
-      try {
-        const res = await fetch(`${API_BASE}/quizzes`);
-        const data = await res.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
-          quizFeedback.textContent = "Your quizzes will appear here once created.";
-          quizProgress.textContent = "No quiz";
-          return;
-        }
-
-        quizzes = data;
-        currentQuizIndex = 0;
-        loadQuiz(currentQuizIndex);
-      } catch (err) {
-        console.error(err);
-        quizFeedback.textContent = "Unable to load quizzes. Please try again later.";
-        quizProgress.textContent = "Error";
-      }
-    }
-
-    function loadQuiz(index) {
-      quizArea.innerHTML = "";
-      quizFeedback.textContent = "Read carefully and choose the safest option.";
-      if (!quizzes[index]) {
-        quizProgress.textContent = "No quiz";
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.message || "Signup failed.";
+        statusEl.classList.add("err");
         return;
       }
-      const q = quizzes[index];
-      quizProgress.textContent = `Question ${index + 1} of ${quizzes.length}`;
+      statusEl.textContent = "Account created. You can now login.";
+      statusEl.classList.add("ok");
+      signupName.value = "";
+      signupEmail.value = "";
+      signupPassword.value = "";
+      signupConfirm.value = "";
+      setTimeout(() => {
+        loginTab.click();
+      }, 700);
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "Network error. Please try again.";
+      statusEl.classList.add("err");
+    }
+  }
 
-      const qText = document.createElement("div");
-      qText.style.fontSize = "11px";
-      qText.style.marginBottom = "6px";
-      qText.textContent = q.question;
-      quizArea.appendChild(qText);
+  async function login() {
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const statusEl = document.getElementById("loginStatus");
+    statusEl.textContent = "";
+    statusEl.className = "status";
 
-      const solutionBox = document.createElement("div");
-      solutionBox.style.fontSize = "11px";
-      solutionBox.style.marginTop = "8px";
-      solutionBox.style.color = "#9ca3af";
-      quizArea.appendChild(solutionBox);
+    if (!email || !password) {
+      statusEl.textContent = "Enter both email and password.";
+      statusEl.classList.add("err");
+      return;
+    }
+    try {
+      const res = await fetch(`${API_BASE}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        statusEl.textContent = data.message || "Invalid credentials.";
+        statusEl.classList.add("err");
+        return;
+      }
+      currentUser = data.user;
+      statusEl.textContent = "Login successful. Loading dashboard...";
+      statusEl.classList.add("ok");
+      startSession();
+      await loadDashboard();
+      setTimeout(() => {
+        authView.style.display = "none";
+        appView.style.display = "flex";
+      }, 400);
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "Network error. Please try again.";
+      statusEl.classList.add("err");
+    }
+  }
 
-      q.options.forEach((opt, optIndex) => {
-        const div = document.createElement("div");
-        div.className = "quiz-option";
-        div.textContent = opt;
+  document.getElementById("signupBtn").onclick = signup;
+  document.getElementById("loginBtn").onclick = login;
 
-        div.addEventListener("click", async () => {
-          const options = quizArea.querySelectorAll(".quiz-option");
-          options.forEach((o) => o.classList.remove("correct", "wrong"));
+  async function loadDashboard() {
+    document.getElementById("studentName").textContent =
+      currentUser?.name || "Student";
 
-          const isCorrect = optIndex === q.correctIndex;
-          const correctText = q.options[q.correctIndex];
+    try {
+      const [uRes, qRes] = await Promise.all([
+        fetch(`${API_BASE}/updates`),
+        fetch(`${API_BASE}/quizzes`),
+      ]);
+      allUpdates = await uRes.json();
+      quizzes = await qRes.json();
+      renderUpdates();
+      renderQuizQuestion(0);
+      pingStreak();
+    } catch (err) {
+      console.error("loadDashboard error", err);
+    }
+  }
 
-          if (isCorrect) {
-            div.classList.add("correct");
-            quizFeedback.textContent = "Hurrey! You got it correct 🎉";
-          } else {
-            div.classList.add("wrong");
-            quizFeedback.textContent =
-              "Ooh, you got it wrong. No worries — here’s the correct answer and explanation 👇";
-          }
+  function renderUpdates() {
+    const highlightBox = document.getElementById("highlightBox");
+    const lessonList = document.getElementById("lessonList");
 
-          const explanation =
-            (q.solution && q.solution.trim().length > 0)
-              ? q.solution
-              : isCorrect
-              ? "This option best protects your account and data."
-              : "The correct option is safest because it avoids sharing sensitive information or clicking unknown links.";
+    if (!Array.isArray(allUpdates) || allUpdates.length === 0) {
+      highlightBox.querySelector(".lesson-highlight-title").textContent =
+        "No updates yet.";
+      highlightBox.querySelector(".lesson-highlight-body").textContent =
+        "Your admin has not published any cyber safety tips yet.";
+      lessonList.innerHTML =
+        '<div class="lesson-item"><div class="lesson-item-title">No tips available.</div></div>';
+      return;
+    }
 
-          solutionBox.innerHTML =
-            `<strong>Correct answer:</strong> "${correctText}"<br>` +
-            `<strong>Explanation:</strong> ${explanation}`;
+    const latest = allUpdates[0];
+    highlightBox.querySelector(".lesson-highlight-title").textContent =
+      latest.title;
+    highlightBox.querySelector(".lesson-highlight-body").textContent =
+      latest.summary;
 
-          // Send attempt to backend for admin + rewards
-          try {
-            if (currentUser) {
-              const res = await fetch(`${API_BASE}/quiz/attempt`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  email: currentUser.email,
-                  name: currentUser.name,
-                  quizId: q.id,
-                  selectedIndex: optIndex,
-                  correct: isCorrect,
-                }),
-              });
-              const data = await res.json();
-              if (res.ok && data.totalPoints !== undefined) {
-                streakPointsEl.textContent = data.totalPoints;
-                streakLevelEl.textContent = data.level || streakLevelEl.textContent;
+    lessonList.innerHTML = "";
+    allUpdates.forEach((u) => {
+      const item = document.createElement("div");
+      item.className = "lesson-item";
+      item.innerHTML = `
+        <div class="lesson-item-title">${u.title}</div>
+        <div>${u.summary}</div>
+        <div class="lesson-item-meta">
+          ${u.label || "Update"} • ${new Date(u.createdAt).toLocaleString()}
+        </div>
+      `;
+      lessonList.appendChild(item);
+    });
+  }
+
+  // STREAK + ACTIVITY
+
+  async function pingStreak() {
+    if (!currentUser) return;
+    try {
+      const res = await fetch(`${API_BASE}/streak/ping`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: currentUser.email,
+          name: currentUser.name,
+        }),
+      });
+      const data = await res.json();
+      document.getElementById("streakDays").textContent =
+        data.currentStreak ?? 0;
+      document.getElementById("streakLongest").textContent =
+        data.longestStreak ?? 0;
+      document.getElementById("streakPoints").textContent = data.points ?? 0;
+      document.getElementById("streakLevel").textContent = data.level || "New learner";
+    } catch (err) {
+      console.error("streak error", err);
+    }
+  }
+
+  async function startSession() {
+    if (!currentUser) return;
+    try {
+      await fetch(`${API_BASE}/activity/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: currentUser.email,
+          name: currentUser.name,
+        }),
+      });
+    } catch (err) {
+      console.error("activity start error", err);
+    }
+  }
+
+  async function stopSession() {
+    if (!currentUser) return;
+    try {
+      await fetch(`${API_BASE}/activity/stop`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: currentUser.email }),
+      });
+    } catch (err) {
+      console.error("activity stop error", err);
+    }
+  }
+
+  window.addEventListener("beforeunload", stopSession);
+
+  // NAV + LOGOUT
+
+  const navLessons = document.getElementById("nav-lessons");
+  const navQuizzes = document.getElementById("nav-quizzes");
+  const lessonsCard = document.getElementById("lessonsCard");
+  const quizIntroCard = document.getElementById("quizIntroCard");
+  const quizView = document.getElementById("quiz-view");
+
+  function setNav(section) {
+    if (section === "lessons") {
+      navLessons.classList.add("active");
+      navQuizzes.classList.remove("active");
+      lessonsCard.style.display = "";
+    } else {
+      navQuizzes.classList.add("active");
+      navLessons.classList.remove("active");
+      lessonsCard.style.display = "";
+    }
+  }
+
+  navLessons.onclick = () => setNav("lessons");
+  navQuizzes.onclick = () => setNav("quizzes");
+
+  document.getElementById("logoutBtn").onclick = async () => {
+    await stopSession();
+    currentUser = null;
+    appView.style.display = "none";
+    authView.style.display = "flex";
+  };
+
+  // QUIZ MODE
+
+  const openQuizBtn = document.getElementById("openQuizBtn");
+  const hideQuizBtn = document.getElementById("hideQuizBtn");
+  const nextQuizBtn = document.getElementById("nextQuizBtn");
+  const quizQuestionEl = document.getElementById("quizQuestion");
+  const quizOptionsEl = document.getElementById("quizOptions");
+  const quizFeedbackEl = document.getElementById("quizFeedback");
+  const quizSolutionEl = document.getElementById("quizSolution");
+  const quizIndexLabel = document.getElementById("quizIndexLabel");
+
+  openQuizBtn.onclick = () => {
+    if (!quizzes || quizzes.length === 0) {
+      alert("No quizzes available yet. Please check again later.");
+      return;
+    }
+    quizIntroCard.style.display = "none";
+    quizView.style.display = "";
+    renderQuizQuestion(currentQuizIndex);
+  };
+
+  hideQuizBtn.onclick = () => {
+    quizView.style.display = "none";
+    quizIntroCard.style.display = "";
+  };
+
+  nextQuizBtn.onclick = () => {
+    if (!quizzes || quizzes.length === 0) return;
+    currentQuizIndex = (currentQuizIndex + 1) % quizzes.length;
+    renderQuizQuestion(currentQuizIndex);
+  };
+
+  function renderQuizQuestion(index) {
+    if (!quizzes || quizzes.length === 0) {
+      quizQuestionEl.textContent = "No quiz questions available.";
+      quizOptionsEl.innerHTML = "";
+      quizFeedbackEl.textContent = "";
+      quizSolutionEl.textContent = "";
+      return;
+    }
+    const q = quizzes[index];
+    hasAnsweredCurrent = false;
+
+    quizIndexLabel.textContent = `Question ${index + 1} of ${quizzes.length}`;
+    quizQuestionEl.textContent = q.question;
+    quizOptionsEl.innerHTML = "";
+    quizFeedbackEl.textContent = "";
+    quizFeedbackEl.className = "quiz-feedback";
+    quizSolutionEl.textContent = "";
+
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement("button");
+      btn.className = "quiz-option";
+      btn.textContent = opt;
+      btn.onclick = () => handleQuizAnswer(q, i, btn);
+      quizOptionsEl.appendChild(btn);
+    });
+  }
+
+  async function handleQuizAnswer(q, index, clickedBtn) {
+    if (hasAnsweredCurrent) return;
+    hasAnsweredCurrent = true;
+
+    const options = Array.from(quizOptionsEl.querySelectorAll(".quiz-option"));
+    options.forEach((btn, i) => {
+      btn.disabled = true;
+      if (i === q.correctIndex) btn.classList.add("correct");
+    });
+
+    let correct = index === q.correctIndex;
+    if (!correct) clickedBtn.classList.add("wrong");
+
+    quizFeedbackEl.classList.add(correct ? "ok" : "err");
+    quizFeedbackEl.textContent = correct
+      ? "Hurrey! You got it correct 🎉"
+      : "Ooh, you got it wrong. No worries — here is the correct answer and explanation.";
+
+    const correctText = q.options[q.correctIndex];
+    quizSolutionEl.textContent =
+      "Correct answer: " +
+      correctText +
+      (q.solution ? " — " + q.solution : "");
+
+    // log attempt to backend
+    if (currentUser) {
+      try {
+        await fetch(`${API_BASE}/quiz/attempt`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: currentUser.email,
+            name: currentUser.name,
+            quizId: q.id,
+            selectedIndex: index,
+            correct,
+          }),
+        }).then((res) => res.json())
+          .then((data) => {
+            if (data && typeof data.totalPoints === "number") {
+              document.getElementById("streakPoints").textContent =
+                data.totalPoints;
+              if (data.level) {
+                document.getElementById("streakLevel").textContent = data.level;
               }
             }
-          } catch (err) {
-            console.error("quiz attempt log error", err);
-          }
-        });
-
-        quizArea.insertBefore(div, solutionBox);
-      });
+          });
+      } catch (err) {
+        console.error("quiz attempt error", err);
+      }
     }
-
-    quizNextBtn.addEventListener("click", () => {
-      if (!quizzes.length) return;
-      currentQuizIndex = (currentQuizIndex + 1) % quizzes.length;
-      loadQuiz(currentQuizIndex);
-    });
-  </script>
+  }
+</script>
 </body>
 </html>
