@@ -2,659 +2,965 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>CyberShield Admin Panel</title>
+  <title>CyberShield Admin Portal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: #020617;
-      color: #e5e7eb;
-      display: flex;
-      justify-content: center;
-      padding: 16px;
-    }
-    .container {
-      width: 100%;
-      max-width: 1080px;
-      background: #020617;
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
-      padding: 20px;
-    }
-    h1 {
-      font-size: 22px;
-      margin-bottom: 4px;
-    }
-    h2 {
-      font-size: 16px;
-      margin: 14px 0 8px;
-    }
-    .muted {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-bottom: 14px;
-    }
-    label {
-      font-size: 12px;
-      display: block;
-      margin-bottom: 4px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 7px 8px;
-      border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 13px;
-      margin-bottom: 8px;
+    * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, sans-serif;
     }
-    textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 7px 14px;
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      color: #020617;
-      margin-top: 4px;
-    }
-    .row {
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #12263f 0, #050816 45%, #02010c 100%);
+      color: #e5e7eb;
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: center;
     }
-    .card {
-      border-radius: 16px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      padding: 12px;
-      background: radial-gradient(circle at top left, #020617, #020617);
-      flex: 1;
-      min-width: 260px;
+    .app {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      margin: 24px;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+      backdrop-filter: blur(16px);
     }
-    .status {
-      font-size: 12px;
-      margin-top: 4px;
-      min-height: 18px;
+    .sidebar {
+      width: 260px;
+      border-right: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 20px 16px;
+      background: radial-gradient(circle at top left, #0f172a, #020617);
     }
-    .status.error {
-      color: #f97373;
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
     }
-    .status.ok {
+    .logo span.shield {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      border: 2px solid #22c55e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
       color: #22c55e;
     }
-    .list {
-      margin-top: 6px;
-      max-height: 200px;
-      overflow-y: auto;
-      font-size: 12px;
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.15);
+      color: #a5f3fc;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 10px;
     }
-    .list-item {
-      padding: 6px 8px;
+    .chip span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    .nav {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .nav button {
+      width: 100%;
+      padding: 10px 12px;
       border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      margin-bottom: 4px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #e5e7eb;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .nav button span {
+      display: flex;
+      align-items: center;
       gap: 8px;
     }
-    .list-item-title {
-      font-weight: 500;
-    }
-    .list-item-meta {
+    .nav button small {
+      opacity: 0.6;
       font-size: 11px;
-      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
-    .list-item button {
-      padding: 4px 8px;
+    .nav button.active,
+    .nav button:hover {
+      background: radial-gradient(circle at top left, #0f172a, #020617);
+      box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.5), 0 0 20px rgba(56, 189, 248, 0.35);
+    }
+    .nav button.active span::before,
+    .nav button:hover span::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+    .sidebar-footer {
+      margin-top: auto;
       font-size: 11px;
-      margin-top: 0;
-      background: #ef4444;
-      color: white;
+      opacity: 0.7;
+      line-height: 1.4;
     }
-    table {
+    .sidebar-footer strong {
+      color: #a5b4fc;
+    }
+    .main {
+      flex: 1;
+      padding: 20px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+    .topbar-title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .topbar-title h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .topbar-title p {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+    .key-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .key-input input {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      padding: 6px 10px;
+      font-size: 12px;
+      color: #e5e7eb;
+      min-width: 130px;
+    }
+    .key-input input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+    }
+    .key-input button {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: none;
+      font-size: 12px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #020617;
+      font-weight: 600;
+    }
+    .key-status {
+      font-size: 11px;
+      margin-top: 4px;
+      min-height: 16px;
+    }
+    .key-status.ok {
+      color: #4ade80;
+    }
+    .key-status.err {
+      color: #f97373;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1.1fr;
+      gap: 14px;
+    }
+    .card {
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.86));
+      border-radius: 14px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: 0 0 22px rgba(15, 23, 42, 0.9);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .card-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .card-header span {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.7;
+    }
+    .card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    label {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    input[type="text"],
+    input[type="number"],
+    textarea {
       width: 100%;
-      border-collapse: collapse;
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 9px;
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      padding: 6px 8px;
+      font-size: 12px;
+      color: #e5e7eb;
+      resize: vertical;
+    }
+    textarea {
+      min-height: 52px;
+      max-height: 120px;
+    }
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      color: #020617;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      color: #e5e7eb;
+    }
+    .tag-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 11px;
-      margin-top: 6px;
+      opacity: 0.8;
     }
-    th, td {
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 4px 6px;
-      text-align: left;
+    .pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.15);
+      color: #bfdbfe;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
     }
-    th {
-      background: #020617;
+    .list {
+      max-height: 220px;
+      overflow: auto;
+      margin-top: 4px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+    .list-empty {
+      padding: 10px;
+      font-size: 11px;
+      opacity: 0.6;
+      text-align: center;
+    }
+    .list-item {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .list-item:last-child {
+      border-bottom: none;
+    }
+    .list-item-main {
+      flex: 1;
+    }
+    .list-item-title {
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .list-item-sub {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      font-size: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.8);
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    .mt-4 {
+      margin-top: 4px;
+    }
+    .mt-8 {
+      margin-top: 8px;
+    }
+    .pill-red {
+      background: rgba(239, 68, 68, 0.12);
+      color: #fecaca;
+    }
+    .pill-green {
+      background: rgba(34, 197, 94, 0.12);
+      color: #bbf7d0;
+    }
+    .pill-yellow {
+      background: rgba(234, 179, 8, 0.12);
+      color: #facc15;
+    }
+    .small-muted {
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    .danger {
+      color: #fb7171;
+    }
+    @media (max-width: 960px) {
+      .app {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+      }
+      .nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0;
+      }
+      .nav button {
+        flex: 1 0 45%;
+      }
+      .sidebar-footer {
+        display: none;
+      }
+    }
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>CyberShield Admin</h1>
-    <div class="muted">
-      Add and manage updates and quizzes for students.  
-      Use the same admin key that is configured in the backend.
-    </div>
-
-    <div class="card" style="margin-bottom: 10px;">
-      <label for="admin-key">Admin key</label>
-      <input type="password" id="admin-key" placeholder="Enter admin key (default: admin123)" />
-    </div>
-
-    <div class="row">
-      <!-- Update form + list -->
-      <div class="card">
-        <h2>Create update</h2>
-        <label for="update-title">Title</label>
-        <input id="update-title" placeholder="Short heading" />
-
-        <label for="update-summary">Summary</label>
-        <textarea id="update-summary" placeholder="Explain the safety tip, news or guidance."></textarea>
-
-        <label for="update-label">Label (optional)</label>
-        <input id="update-label" placeholder="e.g., Safety tip, Important, Account alert" />
-
-        <button id="update-submit">Send update</button>
-        <div id="update-status" class="status"></div>
-
-        <h2 style="margin-top: 14px;">Existing updates</h2>
-        <button id="refresh-updates" style="margin-bottom: 6px;">Refresh updates</button>
-        <div id="updates-list" class="list"></div>
+<div class="app">
+  <aside class="sidebar">
+    <div>
+      <div class="chip">
+        <span class="dot"></span>
+        ADMIN CONSOLE
       </div>
+      <div class="logo">
+        <span class="shield">CS</span>
+        CyberShield EDU
+      </div>
+      <div style="font-size: 12px; opacity: 0.7;">
+        Push real-time cyber safety content and quizzes to every student from one place.
+      </div>
+      <div class="nav">
+        <button id="nav-updates" class="active">
+          <span>Updates</span>
+          <small>Daily tips</small>
+        </button>
+        <button id="nav-quizzes">
+          <span>Quizzes</span>
+          <small>MCQ & solutions</small>
+        </button>
+        <button id="nav-activity">
+          <span>Usage</span>
+          <small>Time & streaks</small>
+        </button>
+        <button id="nav-log">
+          <span>Quiz log</span>
+          <small>Answers</small>
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <div><strong>Note:</strong> Data is stored in memory on the server. On a free plan it may reset when the instance sleeps or redeploys, which is fine for project demo.</div>
+    </div>
+  </aside>
 
-      <!-- Quiz form + list -->
-      <div class="card">
-        <h2>Create quiz</h2>
-
-        <label for="quiz-question">Question</label>
-        <textarea id="quiz-question" placeholder="Write the full question here."></textarea>
-
-        <label>Options</label>
-        <input id="quiz-opt1" placeholder="Option 1" />
-        <input id="quiz-opt2" placeholder="Option 2" />
-        <input id="quiz-opt3" placeholder="Option 3 (optional)" />
-        <input id="quiz-opt4" placeholder="Option 4 (optional)" />
-
-        <label for="quiz-correct">Correct option</label>
-        <select id="quiz-correct">
-          <option value="0">Option 1</option>
-          <option value="1">Option 2</option>
-          <option value="2">Option 3</option>
-          <option value="3">Option 4</option>
-        </select>
-
-        <label for="quiz-solution">Solution / explanation (shown to students)</label>
-        <textarea
-          id="quiz-solution"
-          placeholder="Explain why this answer is correct and what the student should remember next time."></textarea>
-
-        <button id="quiz-submit">Create quiz</button>
-        <div id="quiz-status" class="status"></div>
-
-        <h2 style="margin-top: 14px;">Existing quizzes</h2>
-        <button id="refresh-quizzes" style="margin-bottom: 6px;">Refresh quizzes</button>
-        <div id="quizzes-list" class="list"></div>
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title">
+        <h1>Admin control centre</h1>
+        <p>Use your admin key to manage content for all students.</p>
+        <div id="key-status" class="key-status"></div>
+      </div>
+      <div class="key-input">
+        <input type="password" id="adminKey" placeholder="Admin key (e.g. admin123)" />
+        <button id="connectBtn">Unlock</button>
       </div>
     </div>
 
-    <div class="card" style="margin-top: 12px;">
-      <h2>Student activity (time spent)</h2>
-      <button id="refresh-activity" style="margin-bottom: 6px;">Refresh activity</button>
-      <div class="muted">Shows approximate time students have spent in the application.</div>
-      <div id="activity-status" class="status"></div>
-      <div id="activity-table-wrapper"></div>
+    <!-- PANELS WRAPPER -->
+    <div id="panel-updates" class="grid">
+      <section class="card">
+        <div class="card-header">
+          <h2>Create new update</h2>
+          <span>Daily awareness tip</span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div>
+              <label>Title</label>
+              <input type="text" id="u-title" placeholder="e.g. Verify links before logging in" />
+            </div>
+            <div>
+              <label>Label (optional)</label>
+              <input type="text" id="u-label" placeholder="Tip / Alert / Phishing" />
+            </div>
+          </div>
+          <div>
+            <label>Short message</label>
+            <textarea id="u-summary" placeholder="Explain the scam or safety behaviour in 1–2 lines."></textarea>
+          </div>
+          <button class="btn btn-primary" id="createUpdateBtn">Push update</button>
+          <div class="small-muted">
+            New updates appear instantly on students’ home page. They only need to refresh.
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>Existing updates</h2>
+          <span>Live on student dashboard</span>
+        </div>
+        <div class="card-body">
+          <div class="tag-row">
+            <div class="pill">Latest first</div>
+            <div id="updates-count" style="font-size: 11px; opacity: 0.8;"></div>
+          </div>
+          <div id="updates-list" class="list">
+            <div class="list-empty">No updates yet. Add your first cyber safety tip on the left.</div>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <div class="card" style="margin-top: 12px;">
-      <h2>Student quiz activity</h2>
-      <button id="refresh-quiz-activity" style="margin-bottom: 6px;">Refresh quiz activity</button>
-      <div class="muted">Recent quiz attempts by students, including correct/incorrect answers.</div>
-      <div id="quiz-activity-status" class="status"></div>
-      <div id="quiz-activity-table-wrapper"></div>
+    <!-- QUIZZES PANEL -->
+    <div id="panel-quizzes" class="grid" style="display:none;">
+      <section class="card">
+        <div class="card-header">
+          <h2>Create quiz question</h2>
+          <span>MCQ with explanation</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <label>Question</label>
+            <textarea id="q-question" placeholder="Write a clear, scenario-based question."></textarea>
+          </div>
+          <div class="row">
+            <div>
+              <label>Option A</label>
+              <input type="text" id="q-o1" />
+            </div>
+            <div>
+              <label>Option B</label>
+              <input type="text" id="q-o2" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Option C</label>
+              <input type="text" id="q-o3" />
+            </div>
+            <div>
+              <label>Option D</label>
+              <input type="text" id="q-o4" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Correct option (0–3)</label>
+              <input type="number" id="q-correct" min="0" max="3" value="1" />
+            </div>
+            <div>
+              <label>Explanation</label>
+              <input type="text" id="q-solution" placeholder="Why is this the correct behaviour?" />
+            </div>
+          </div>
+          <button class="btn btn-primary" id="createQuizBtn">Publish quiz</button>
+          <div class="small-muted">
+            Students will see instant feedback with your explanation when they answer.
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>All quizzes</h2>
+          <span>Visible on student quiz tab</span>
+        </div>
+        <div class="card-body">
+          <div class="tag-row">
+            <div class="pill pill-green">Live bank</div>
+            <div id="quizzes-count" style="font-size: 11px; opacity: 0.8;"></div>
+          </div>
+          <div id="quizzes-list" class="list">
+            <div class="list-empty">No quiz questions yet. Create one on the left.</div>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
 
-  <script>
-    const API_BASE = "/api";
+    <!-- ACTIVITY PANEL -->
+    <div id="panel-activity" class="grid" style="display:none;">
+      <section class="card">
+        <div class="card-header">
+          <h2>Usage activity</h2>
+          <span>Time spent inside app</span>
+        </div>
+        <div class="card-body">
+          <div class="tag-row">
+            <div class="pill pill-yellow">Sessions & minutes</div>
+          </div>
+          <div id="activity-list" class="list">
+            <div class="list-empty">Activity data will appear as students use the app.</div>
+          </div>
+        </div>
+      </section>
 
-    const adminKeyInput = document.getElementById("admin-key");
+      <section class="card">
+        <div class="card-header">
+          <h2>Streak & rewards</h2>
+          <span>Daily learning habit</span>
+        </div>
+        <div class="card-body">
+          <div class="tag-row">
+            <div class="pill pill-green">Gamified</div>
+          </div>
+          <div id="streaks-list" class="list">
+            <div class="list-empty">As students log in daily, their streaks and levels will appear here.</div>
+          </div>
+        </div>
+      </section>
+    </div>
 
-    // Updates
-    const updateTitle = document.getElementById("update-title");
-    const updateSummary = document.getElementById("update-summary");
-    const updateLabel = document.getElementById("update-label");
-    const updateSubmit = document.getElementById("update-submit");
-    const updateStatus = document.getElementById("update-status");
-    const refreshUpdatesBtn = document.getElementById("refresh-updates");
-    const updatesListEl = document.getElementById("updates-list");
+    <!-- QUIZ LOG PANEL -->
+    <div id="panel-log" class="card" style="display:none;">
+      <div class="card-header">
+        <h2>Recent quiz activity</h2>
+        <span>Who attempted what</span>
+      </div>
+      <div class="card-body">
+        <div class="tag-row">
+          <div class="pill">Latest 200 attempts</div>
+        </div>
+        <div id="log-list" class="list">
+          <div class="list-empty">Quiz attempts will start appearing as students answer.</div>
+        </div>
+        <div class="small-muted mt-4">
+          Use this log during demo/viva to show that the system tracks who answered correctly or incorrectly in real time.
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
 
-    // Quizzes
-    const quizQuestion = document.getElementById("quiz-question");
-    const quizOpt1 = document.getElementById("quiz-opt1");
-    const quizOpt2 = document.getElementById("quiz-opt2");
-    const quizOpt3 = document.getElementById("quiz-opt3");
-    const quizOpt4 = document.getElementById("quiz-opt4");
-    const quizCorrect = document.getElementById("quiz-correct");
-    const quizSolution = document.getElementById("quiz-solution");
-    const quizSubmit = document.getElementById("quiz-submit");
-    const quizStatus = document.getElementById("quiz-status");
-    const refreshQuizzesBtn = document.getElementById("refresh-quizzes");
-    const quizzesListEl = document.getElementById("quizzes-list");
+<script>
+  const API_BASE = "/api"; // very important
 
-    // Time activity
-    const refreshActivityBtn = document.getElementById("refresh-activity");
-    const activityStatus = document.getElementById("activity-status");
-    const activityTableWrapper = document.getElementById("activity-table-wrapper");
+  let ADMIN_KEY_VALUE = "";
+  const keyInput = document.getElementById("adminKey");
+  const keyStatus = document.getElementById("key-status");
+  const connectBtn = document.getElementById("connectBtn");
 
-    // Quiz activity
-    const refreshQuizActivityBtn = document.getElementById("refresh-quiz-activity");
-    const quizActivityStatus = document.getElementById("quiz-activity-status");
-    const quizActivityWrapper = document.getElementById("quiz-activity-table-wrapper");
+  const navButtons = {
+    updates: document.getElementById("nav-updates"),
+    quizzes: document.getElementById("nav-quizzes"),
+    activity: document.getElementById("nav-activity"),
+    log: document.getElementById("nav-log"),
+  };
 
-    // --- Updates ---
+  const panels = {
+    updates: document.getElementById("panel-updates"),
+    quizzes: document.getElementById("panel-quizzes"),
+    activity: document.getElementById("panel-activity"),
+    log: document.getElementById("panel-log"),
+  };
 
-    updateSubmit.addEventListener("click", async () => {
-      updateStatus.textContent = "";
-      updateStatus.className = "status";
-
-      const key = adminKeyInput.value.trim();
-      if (!key) {
-        updateStatus.textContent = "Enter admin key.";
-        updateStatus.classList.add("error");
-        return;
-      }
-
-      const title = updateTitle.value.trim();
-      const summary = updateSummary.value.trim();
-      const label = updateLabel.value.trim();
-
-      if (!title || !summary) {
-        updateStatus.textContent = "Title and summary are required.";
-        updateStatus.classList.add("error");
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API_BASE}/admin/updates`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-key": key,
-          },
-          body: JSON.stringify({ title, summary, label }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          updateStatus.textContent = data.message || "Unable to create update.";
-          updateStatus.classList.add("error");
-          return;
-        }
-
-        updateStatus.textContent = "Update created.";
-        updateStatus.classList.add("ok");
-        updateTitle.value = "";
-        updateSummary.value = "";
-        updateLabel.value = "";
-        loadUpdates();
-      } catch (err) {
-        console.error(err);
-        updateStatus.textContent = "Network error.";
-        updateStatus.classList.add("error");
-      }
+  function setActive(panelName) {
+    Object.keys(navButtons).forEach((k) => {
+      navButtons[k].classList.toggle("active", k === panelName);
+      panels[k].style.display = k === panelName ? "" : "none";
     });
+  }
 
-    refreshUpdatesBtn.addEventListener("click", loadUpdates);
+  navButtons.updates.onclick = () => setActive("updates");
+  navButtons.quizzes.onclick = () => setActive("quizzes");
+  navButtons.activity.onclick = () => {
+    setActive("activity");
+    if (ADMIN_KEY_VALUE) {
+      loadActivity();
+      loadStreaks();
+    }
+  };
+  navButtons.log.onclick = () => {
+    setActive("log");
+    if (ADMIN_KEY_VALUE) loadQuizLog();
+  };
 
-    async function loadUpdates() {
-      updatesListEl.innerHTML = "Loading...";
-      try {
-        const res = await fetch(`${API_BASE}/updates`);
-        const data = await res.json();
+  async function checkKey() {
+    const key = keyInput.value.trim();
+    if (!key) {
+      keyStatus.textContent = "Please enter your admin key.";
+      keyStatus.className = "key-status err";
+      return;
+    }
+    ADMIN_KEY_VALUE = key;
+    try {
+      await loadUpdates();
+      await loadQuizzes();
+      keyStatus.textContent = "Admin key accepted. You can now manage content.";
+      keyStatus.className = "key-status ok";
+    } catch (err) {
+      console.error(err);
+      ADMIN_KEY_VALUE = "";
+      keyStatus.textContent = "Invalid admin key or server error.";
+      keyStatus.className = "key-status err";
+    }
+  }
 
-        if (!Array.isArray(data) || data.length === 0) {
-          updatesListEl.innerHTML = "No updates yet.";
-          return;
-        }
+  connectBtn.onclick = checkKey;
+  keyInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") checkKey();
+  });
 
-        updatesListEl.innerHTML = "";
-        const key = adminKeyInput.value.trim();
+  async function loadUpdates() {
+    const res = await fetch(`${API_BASE}/updates`);
+    const data = await res.json();
+    const listEl = document.getElementById("updates-list");
+    const countEl = document.getElementById("updates-count");
 
-        data.forEach((u) => {
-          const div = document.createElement("div");
-          div.className = "list-item";
-          const info = document.createElement("div");
-          info.innerHTML = `
-            <div class="list-item-title">${u.title}</div>
-            <div class="list-item-meta">${u.label || "Update"}</div>
-          `;
-          const btn = document.createElement("button");
-          btn.textContent = "Delete";
-          btn.addEventListener("click", async () => {
-            if (!key) {
-              alert("Enter admin key first.");
-              return;
-            }
-            if (!confirm("Delete this update?")) return;
-            try {
-              const delRes = await fetch(`${API_BASE}/admin/updates/${u.id}`, {
-                method: "DELETE",
-                headers: { "x-admin-key": key },
-              });
-              const delData = await delRes.json();
-              if (!delRes.ok) {
-                alert(delData.message || "Unable to delete update.");
-                return;
-              }
-              loadUpdates();
-            } catch (err) {
-              console.error(err);
-              alert("Network error while deleting update.");
-            }
-          });
-
-          div.appendChild(info);
-          div.appendChild(btn);
-          updatesListEl.appendChild(div);
-        });
-      } catch (err) {
-        console.error(err);
-        updatesListEl.innerHTML = "Error loading updates.";
-      }
+    if (!Array.isArray(data) || data.length === 0) {
+      listEl.innerHTML = '<div class="list-empty">No updates yet.</div>';
+      countEl.textContent = "0 items";
+      return;
     }
 
-    // --- Quizzes ---
-
-    quizSubmit.addEventListener("click", async () => {
-      quizStatus.textContent = "";
-      quizStatus.className = "status";
-
-      const key = adminKeyInput.value.trim();
-      if (!key) {
-        quizStatus.textContent = "Enter admin key.";
-        quizStatus.classList.add("error");
-        return;
-      }
-
-      const question = quizQuestion.value.trim();
-      const options = [
-        quizOpt1.value.trim(),
-        quizOpt2.value.trim(),
-        quizOpt3.value.trim(),
-        quizOpt4.value.trim(),
-      ];
-      let correctIndex = parseInt(quizCorrect.value, 10);
-      const solution = quizSolution.value.trim();
-
-      if (!question) {
-        quizStatus.textContent = "Question is required.";
-        quizStatus.classList.add("error");
-        return;
-      }
-      if (!options[0] || !options[1]) {
-        quizStatus.textContent = "Please fill at least option 1 and option 2.";
-        quizStatus.classList.add("error");
-        return;
-      }
-      if (!options[correctIndex]) {
-        correctIndex = 0;
-      }
-
-      try {
-        const res = await fetch(`${API_BASE}/admin/quizzes`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-key": key,
-          },
-          body: JSON.stringify({ question, options, correctIndex, solution }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-          quizStatus.textContent = data.message || "Unable to create quiz.";
-          quizStatus.classList.add("error");
-          return;
-        }
-
-        quizStatus.textContent = "Quiz created.";
-        quizStatus.classList.add("ok");
-        quizQuestion.value = "";
-        quizOpt1.value = "";
-        quizOpt2.value = "";
-        quizOpt3.value = "";
-        quizOpt4.value = "";
-        quizSolution.value = "";
-        loadQuizzes();
-      } catch (err) {
-        console.error(err);
-        quizStatus.textContent = "Network error.";
-        quizStatus.classList.add("error");
-      }
+    countEl.textContent = `${data.length} items`;
+    listEl.innerHTML = "";
+    data.forEach((u) => {
+      const row = document.createElement("div");
+      row.className = "list-item";
+      row.innerHTML = `
+        <div class="list-item-main">
+          <div class="list-item-title">${u.title}</div>
+          <div class="list-item-sub">${u.summary}</div>
+          <div class="small-muted mt-4">${u.label || "Update"} • ${new Date(
+        u.createdAt
+      ).toLocaleString()}</div>
+        </div>
+        <div>
+          <button class="btn btn-outline danger" data-id="${u.id}">Delete</button>
+        </div>
+      `;
+      row.querySelector("button").onclick = () => deleteUpdate(u.id);
+      listEl.appendChild(row);
     });
+  }
 
-    refreshQuizzesBtn.addEventListener("click", loadQuizzes);
-
-    async function loadQuizzes() {
-      quizzesListEl.innerHTML = "Loading...";
-      try {
-        const res = await fetch(`${API_BASE}/quizzes`);
-        const data = await res.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
-          quizzesListEl.innerHTML = "No quizzes yet.";
-          return;
-        }
-
-        quizzesListEl.innerHTML = "";
-        const key = adminKeyInput.value.trim();
-
-        data.forEach((q) => {
-          const preview =
-            (q.question || "").length > 60
-              ? q.question.slice(0, 57) + "..."
-              : q.question || "Untitled question";
-
-          const div = document.createElement("div");
-          div.className = "list-item";
-          const info = document.createElement("div");
-          info.innerHTML = `
-            <div class="list-item-title">${preview}</div>
-            <div class="list-item-meta">${q.options.length} options${
-              q.solution ? " · has solution" : ""
-            }</div>
-          `;
-          const btn = document.createElement("button");
-          btn.textContent = "Delete";
-          btn.addEventListener("click", async () => {
-            if (!key) {
-              alert("Enter admin key first.");
-              return;
-            }
-            if (!confirm("Delete this quiz?")) return;
-            try {
-              const delRes = await fetch(`${API_BASE}/admin/quizzes/${q.id}`, {
-                method: "DELETE",
-                headers: { "x-admin-key": key },
-              });
-              const delData = await delRes.json();
-              if (!delRes.ok) {
-                alert(delData.message || "Unable to delete quiz.");
-                return;
-              }
-              loadQuizzes();
-            } catch (err) {
-              console.error(err);
-              alert("Network error while deleting quiz.");
-            }
-          });
-
-          div.appendChild(info);
-          div.appendChild(btn);
-          quizzesListEl.appendChild(div);
-        });
-      } catch (err) {
-        console.error(err);
-        quizzesListEl.innerHTML = "Error loading quizzes.";
-      }
-    }
-
-    // --- Time activity ---
-
-    refreshActivityBtn.addEventListener("click", loadActivity);
-
-    async function loadActivity() {
-      activityStatus.textContent = "";
-      activityStatus.className = "status";
-      activityTableWrapper.innerHTML = "Loading...";
-
-      const key = adminKeyInput.value.trim();
-      if (!key) {
-        activityStatus.textContent = "Enter admin key.";
-        activityStatus.classList.add("error");
-        activityTableWrapper.innerHTML = "";
-        return;
-      }
-
-      try {
-        const res = await fetch(`${API_BASE}/admin/activity?adminKey=${encodeURIComponent(key)}`);
-        const data = await res.json();
-
-        if (!res.ok) {
-          activityStatus.textContent = data.message || "Unable to load activity.";
-          activityStatus.classList.add("error");
-          activityTableWrapper.innerHTML = "";
-          return;
-        }
-
-        if (!Array.isArray(data) || data.length === 0) {
-          activityTableWrapper.innerHTML = "No activity recorded yet.";
-          return;
-        }
-
-        activityStatus.textContent = "";
-        const rows = data
-          .map(
-            (a) => `
-          <tr>
-            <td>${a.name || "-"}</td>
-            <td>${a.email}</td>
-            <td>${a.totalMinutes}</td>
-            <td>${a.sessionsCount}</td>
-            <td>${a.isActive ? "Active" : "Inactive"}</td>
-          </tr>
-        `
-          )
-          .join("");
-
-        activityTableWrapper.innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Total minutes</th>
-                <th>Sessions</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        `;
-      } catch (err) {
-        console.error(err);
-        activityStatus.textContent = "Network error.";
-        activityStatus.classList.add("error");
-        activityTableWrapper.innerHTML = "";
-      }
-    }
-
-    // --- Quiz activity (attempts) ---
-
-    refreshQuizActivityBtn.addEventListener("click", loadQuizActivity);
-
-    async function loadQuizActivity() {
-      quizActivityStatus.textContent = "";
-      quizActivityStatus.className = "status";
-      quizActivityWrapper.innerHTML = "Loading...";
-
-      const key = adminKeyInput.value.trim();
-      if (!key) {
-        quizActivityStatus.textContent = "Enter admin key.";
-        quizActivityStatus.classList.add("error");
-        quizActivityWrapper.innerHTML = "";
-        return;
-      }
-
-      try {
-        const res = await fetch(
-          `${API_BASE}/admin/quiz-activity?adminKey=${encodeURIComponent(key)}`
-        );
-        const data = await res.json();
-
-        if (!res.ok) {
-          quizActivityStatus.textContent = data.message || "Unable to load quiz activity.";
-          quizActivityStatus.classList.add("error");
-          quizActivityWrapper.innerHTML = "";
-          return;
-        }
-
-        if (!Array.isArray(data) || data.length === 0) {
-          quizActivityWrapper.innerHTML = "No quiz attempts recorded yet.";
-          return;
-        }
-
-        const rows = data
-          .map(
-            (a) => `
-          <tr>
-            <td>${a.name || "-"}</td>
-            <td>${a.email}</td>
-            <td>${a.quizTitle}</td>
-            <td>${a.correct ? "✔" : "✖"}</td>
-            <td>${a.selectedIndex + 1}</td>
-            <td>${a.createdAt ? new Date(a.createdAt).toLocaleString() : "-"}</td>
-          </tr>
-        `
-          )
-          .join("");
-
-        quizActivityWrapper.innerHTML = `
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Quiz</th>
-                <th>Correct?</th>
-                <th>Option</th>
-                <th>Time</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        `;
-      } catch (err) {
-        console.error(err);
-        quizActivityStatus.textContent = "Network error.";
-        quizActivityStatus.classList.add("error");
-        quizActivityWrapper.innerHTML = "";
-      }
-    }
-
-    // initial
+  async function deleteUpdate(id) {
+    if (!confirm("Delete this update?")) return;
+    await fetch(`${API_BASE}/admin/updates/${id}`, {
+      method: "DELETE",
+      headers: { "x-admin-key": ADMIN_KEY_VALUE },
+    });
     loadUpdates();
+  }
+
+  async function createUpdate() {
+    const title = document.getElementById("u-title").value.trim();
+    const summary = document.getElementById("u-summary").value.trim();
+    const label = document.getElementById("u-label").value.trim();
+    if (!title || !summary) {
+      alert("Title and summary are required.");
+      return;
+    }
+    await fetch(`${API_BASE}/admin/updates`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-key": ADMIN_KEY_VALUE,
+      },
+      body: JSON.stringify({ title, summary, label }),
+    });
+    document.getElementById("u-title").value = "";
+    document.getElementById("u-summary").value = "";
+    document.getElementById("u-label").value = "";
+    loadUpdates();
+  }
+
+  document.getElementById("createUpdateBtn").onclick = () => {
+    if (!ADMIN_KEY_VALUE) {
+      alert("Unlock with admin key first.");
+      return;
+    }
+    createUpdate();
+  };
+
+  async function loadQuizzes() {
+    const res = await fetch(`${API_BASE}/quizzes`);
+    const data = await res.json();
+    const listEl = document.getElementById("quizzes-list");
+    const countEl = document.getElementById("quizzes-count");
+
+    if (!Array.isArray(data) || data.length === 0) {
+      listEl.innerHTML = '<div class="list-empty">No quiz questions yet.</div>';
+      countEl.textContent = "0 questions";
+      return;
+    }
+
+    countEl.textContent = `${data.length} questions`;
+    listEl.innerHTML = "";
+    data.forEach((q) => {
+      const row = document.createElement("div");
+      row.className = "list-item";
+      row.innerHTML = `
+        <div class="list-item-main">
+          <div class="list-item-title">${q.question}</div>
+          <div class="list-item-sub">Correct option index: ${
+            q.correctIndex
+          }</div>
+          <div class="small-muted mt-4">Explanation: ${
+            q.solution || "—"
+          }</div>
+        </div>
+        <div>
+          <button class="btn btn-outline danger" data-id="${q.id}">Delete</button>
+        </div>
+      `;
+      row.querySelector("button").onclick = () => deleteQuiz(q.id);
+      listEl.appendChild(row);
+    });
+  }
+
+  async function deleteQuiz(id) {
+    if (!confirm("Delete this quiz?")) return;
+    await fetch(`${API_BASE}/admin/quizzes/${id}`, {
+      method: "DELETE",
+      headers: { "x-admin-key": ADMIN_KEY_VALUE },
+    });
     loadQuizzes();
-  </script>
+  }
+
+  async function createQuiz() {
+    const question = document.getElementById("q-question").value.trim();
+    const options = [
+      document.getElementById("q-o1").value.trim(),
+      document.getElementById("q-o2").value.trim(),
+      document.getElementById("q-o3").value.trim(),
+      document.getElementById("q-o4").value.trim(),
+    ];
+    const correctIndex = Number(
+      document.getElementById("q-correct").value || "0"
+    );
+    const solution = document.getElementById("q-solution").value.trim();
+
+    if (!question || !options[0] || !options[1]) {
+      alert("Question and at least two options are required.");
+      return;
+    }
+    await fetch(`${API_BASE}/admin/quizzes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-key": ADMIN_KEY_VALUE,
+      },
+      body: JSON.stringify({ question, options, correctIndex, solution }),
+    });
+
+    document.getElementById("q-question").value = "";
+    document.getElementById("q-o1").value = "";
+    document.getElementById("q-o2").value = "";
+    document.getElementById("q-o3").value = "";
+    document.getElementById("q-o4").value = "";
+    document.getElementById("q-correct").value = "1";
+    document.getElementById("q-solution").value = "";
+    loadQuizzes();
+  }
+
+  document.getElementById("createQuizBtn").onclick = () => {
+    if (!ADMIN_KEY_VALUE) {
+      alert("Unlock with admin key first.");
+      return;
+    }
+    createQuiz();
+  };
+
+  async function loadActivity() {
+    const res = await fetch(`${API_BASE}/admin/activity?adminKey=${ADMIN_KEY_VALUE}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const listEl = document.getElementById("activity-list");
+    if (!Array.isArray(data) || data.length === 0) {
+      listEl.innerHTML =
+        '<div class="list-empty">No activity data yet. Ask students to use the app.</div>';
+      return;
+    }
+    listEl.innerHTML = "";
+    data.forEach((a) => {
+      const row = document.createElement("div");
+      row.className = "list-item";
+      row.innerHTML = `
+        <div class="list-item-main">
+          <div class="list-item-title">${a.name || a.email}</div>
+          <div class="list-item-sub">Total time: ${
+            a.totalMinutes
+          } mins • Sessions: ${a.sessionsCount}</div>
+          <div class="small-muted mt-4">Last seen: ${
+            a.lastSeen ? new Date(a.lastSeen).toLocaleString() : "—"
+          }</div>
+        </div>
+        <div>
+          <span class="badge">
+            <span class="badge-dot" style="opacity: ${
+              a.isActive ? 1 : 0.2
+            };"></span>
+            ${a.isActive ? "Active now" : "Inactive"}
+          </span>
+        </div>
+      `;
+      listEl.appendChild(row);
+    });
+  }
+
+  async function loadStreaks() {
+    const res = await fetch(`${API_BASE}/admin/streaks?adminKey=${ADMIN_KEY_VALUE}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    const listEl = document.getElementById("streaks-list");
+    if (!Array.isArray(data) || data.length === 0) {
+      listEl.innerHTML =
+        '<div class="list-empty">No streaks yet. Students will appear here after using the app for a few days.</div>';
+      return;
+    }
+    listEl.innerHTML = "";
+    data.forEach((s) => {
+      const row = document.createElement("div");
+      row.className = "list-item";
+      row.innerHTML = `
+        <div class="list-item-main">
+          <div class="list-item-title">${s.name || s.email}</div>
+          <div class="list-item-sub">Current streak: ${
+            s.currentStreak
+          } days • Longest: ${s.longestStreak} days</div>
+          <div class="small-muted mt-4">Points: ${
+            s.points
+          } • Level: ${s.level}</div>
+        </div>
+      `;
+      listEl.appendChild(row);
+    });
+  }
+
+  async function loadQuizLog() {
+    const res = await fetch(
+      `${API_BASE}/admin/quiz-activity?adminKey=${ADMIN_KEY_VALUE}`
+    );
+    if (!res.ok) return;
+    const data = await res.json();
+    const listEl = document.getElementById("log-list");
+
+    if (!Array.isArray(data) || data.length === 0) {
+      listEl.innerHTML =
+        '<div class="list-empty">No quiz attempts yet.</div>';
+      return;
+    }
+
+    listEl.innerHTML = "";
+    data.forEach((q) => {
+      const row = document.createElement("div");
+      row.className = "list-item";
+      row.innerHTML = `
+        <div class="list-item-main">
+          <div class="list-item-title">${q.name || q.email}</div>
+          <div class="list-item-sub">${q.quizTitle}</div>
+          <div class="small-muted mt-4">
+            Answered: option ${q.selectedIndex} • ${
+        q.correct ? "✅ Correct" : "❌ Wrong"
+      } • ${new Date(q.createdAt).toLocaleString()}
+          </div>
+        </div>
+      `;
+      listEl.appendChild(row);
+    });
+  }
+</script>
 </body>
 </html>
