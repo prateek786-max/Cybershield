@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CyberShield Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+    .container {
+      width: 100%;
+      max-width: 1080px;
+      background: #020617;
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.9);
+      padding: 20px;
+    }
+    h1 {
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    h2 {
+      font-size: 16px;
+      margin: 14px 0 8px;
+    }
+    .muted {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 14px;
+    }
+    label {
+      font-size: 12px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 7px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 13px;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+    }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 7px 14px;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #020617;
+      margin-top: 4px;
+    }
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card {
+      border-radius: 16px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      padding: 12px;
+      background: radial-gradient(circle at top left, #020617, #020617);
+      flex: 1;
+      min-width: 260px;
+    }
+    .status {
+      font-size: 12px;
+      margin-top: 4px;
+      min-height: 18px;
+    }
+    .status.error {
+      color: #f97373;
+    }
+    .status.ok {
+      color: #22c55e;
+    }
+    .list {
+      margin-top: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+    }
+    .list-item {
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .list-item-title {
+      font-weight: 500;
+    }
+    .list-item-meta {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .list-item button {
+      padding: 4px 8px;
+      font-size: 11px;
+      margin-top: 0;
+      background: #ef4444;
+      color: white;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-top: 6px;
+    }
+    th, td {
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 4px 6px;
+      text-align: left;
+    }
+    th {
+      background: #020617;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CyberShield Admin</h1>
+    <div class="muted">
+      Add and manage updates and quizzes for students.  
+      Use the same admin key that is configured in the backend.
+    </div>
+
+    <div class="card" style="margin-bottom: 10px;">
+      <label for="admin-key">Admin key</label>
+      <input type="password" id="admin-key" placeholder="Enter admin key (default: admin123)" />
+    </div>
+
+    <div class="row">
+      <!-- Update form + list -->
+      <div class="card">
+        <h2>Create update</h2>
+        <label for="update-title">Title</label>
+        <input id="update-title" placeholder="Short heading" />
+
+        <label for="update-summary">Summary</label>
+        <textarea id="update-summary" placeholder="Explain the safety tip, news or guidance."></textarea>
+
+        <label for="update-label">Label (optional)</label>
+        <input id="update-label" placeholder="e.g., Safety tip, Important, Account alert" />
+
+        <button id="update-submit">Send update</button>
+        <div id="update-status" class="status"></div>
+
+        <h2 style="margin-top: 14px;">Existing updates</h2>
+        <button id="refresh-updates" style="margin-bottom: 6px;">Refresh updates</button>
+        <div id="updates-list" class="list"></div>
+      </div>
+
+      <!-- Quiz form + list -->
+      <div class="card">
+        <h2>Create quiz</h2>
+
+        <label for="quiz-question">Question</label>
+        <textarea id="quiz-question" placeholder="Write the full question here."></textarea>
+
+        <label>Options</label>
+        <input id="quiz-opt1" placeholder="Option 1" />
+        <input id="quiz-opt2" placeholder="Option 2" />
+        <input id="quiz-opt3" placeholder="Option 3 (optional)" />
+        <input id="quiz-opt4" placeholder="Option 4 (optional)" />
+
+        <label for="quiz-correct">Correct option</label>
+        <select id="quiz-correct">
+          <option value="0">Option 1</option>
+          <option value="1">Option 2</option>
+          <option value="2">Option 3</option>
+          <option value="3">Option 4</option>
+        </select>
+
+        <label for="quiz-solution">Solution / explanation (shown to students)</label>
+        <textarea
+          id="quiz-solution"
+          placeholder="Explain why this answer is correct and what the student should remember next time."></textarea>
+
+        <button id="quiz-submit">Create quiz</button>
+        <div id="quiz-status" class="status"></div>
+
+        <h2 style="margin-top: 14px;">Existing quizzes</h2>
+        <button id="refresh-quizzes" style="margin-bottom: 6px;">Refresh quizzes</button>
+        <div id="quizzes-list" class="list"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 12px;">
+      <h2>Student activity (time spent)</h2>
+      <button id="refresh-activity" style="margin-bottom: 6px;">Refresh activity</button>
+      <div class="muted">Shows approximate time students have spent in the application.</div>
+      <div id="activity-status" class="status"></div>
+      <div id="activity-table-wrapper"></div>
+    </div>
+
+    <div class="card" style="margin-top: 12px;">
+      <h2>Student quiz activity</h2>
+      <button id="refresh-quiz-activity" style="margin-bottom: 6px;">Refresh quiz activity</button>
+      <div class="muted">Recent quiz attempts by students, including correct/incorrect answers.</div>
+      <div id="quiz-activity-status" class="status"></div>
+      <div id="quiz-activity-table-wrapper"></div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+
+    const adminKeyInput = document.getElementById("admin-key");
+
+    // Updates
+    const updateTitle = document.getElementById("update-title");
+    const updateSummary = document.getElementById("update-summary");
+    const updateLabel = document.getElementById("update-label");
+    const updateSubmit = document.getElementById("update-submit");
+    const updateStatus = document.getElementById("update-status");
+    const refreshUpdatesBtn = document.getElementById("refresh-updates");
+    const updatesListEl = document.getElementById("updates-list");
+
+    // Quizzes
+    const quizQuestion = document.getElementById("quiz-question");
+    const quizOpt1 = document.getElementById("quiz-opt1");
+    const quizOpt2 = document.getElementById("quiz-opt2");
+    const quizOpt3 = document.getElementById("quiz-opt3");
+    const quizOpt4 = document.getElementById("quiz-opt4");
+    const quizCorrect = document.getElementById("quiz-correct");
+    const quizSolution = document.getElementById("quiz-solution");
+    const quizSubmit = document.getElementById("quiz-submit");
+    const quizStatus = document.getElementById("quiz-status");
+    const refreshQuizzesBtn = document.getElementById("refresh-quizzes");
+    const quizzesListEl = document.getElementById("quizzes-list");
+
+    // Time activity
+    const refreshActivityBtn = document.getElementById("refresh-activity");
+    const activityStatus = document.getElementById("activity-status");
+    const activityTableWrapper = document.getElementById("activity-table-wrapper");
+
+    // Quiz activity
+    const refreshQuizActivityBtn = document.getElementById("refresh-quiz-activity");
+    const quizActivityStatus = document.getElementById("quiz-activity-status");
+    const quizActivityWrapper = document.getElementById("quiz-activity-table-wrapper");
+
+    // --- Updates ---
+
+    updateSubmit.addEventListener("click", async () => {
+      updateStatus.textContent = "";
+      updateStatus.className = "status";
+
+      const key = adminKeyInput.value.trim();
+      if (!key) {
+        updateStatus.textContent = "Enter admin key.";
+        updateStatus.classList.add("error");
+        return;
+      }
+
+      const title = updateTitle.value.trim();
+      const summary = updateSummary.value.trim();
+      const label = updateLabel.value.trim();
+
+      if (!title || !summary) {
+        updateStatus.textContent = "Title and summary are required.";
+        updateStatus.classList.add("error");
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/admin/updates`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": key,
+          },
+          body: JSON.stringify({ title, summary, label }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          updateStatus.textContent = data.message || "Unable to create update.";
+          updateStatus.classList.add("error");
+          return;
+        }
+
+        updateStatus.textContent = "Update created.";
+        updateStatus.classList.add("ok");
+        updateTitle.value = "";
+        updateSummary.value = "";
+        updateLabel.value = "";
+        loadUpdates();
+      } catch (err) {
+        console.error(err);
+        updateStatus.textContent = "Network error.";
+        updateStatus.classList.add("error");
+      }
+    });
+
+    refreshUpdatesBtn.addEventListener("click", loadUpdates);
+
+    async function loadUpdates() {
+      updatesListEl.innerHTML = "Loading...";
+      try {
+        const res = await fetch(`${API_BASE}/updates`);
+        const data = await res.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+          updatesListEl.innerHTML = "No updates yet.";
+          return;
+        }
+
+        updatesListEl.innerHTML = "";
+        const key = adminKeyInput.value.trim();
+
+        data.forEach((u) => {
+          const div = document.createElement("div");
+          div.className = "list-item";
+          const info = document.createElement("div");
+          info.innerHTML = `
+            <div class="list-item-title">${u.title}</div>
+            <div class="list-item-meta">${u.label || "Update"}</div>
+          `;
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.addEventListener("click", async () => {
+            if (!key) {
+              alert("Enter admin key first.");
+              return;
+            }
+            if (!confirm("Delete this update?")) return;
+            try {
+              const delRes = await fetch(`${API_BASE}/admin/updates/${u.id}`, {
+                method: "DELETE",
+                headers: { "x-admin-key": key },
+              });
+              const delData = await delRes.json();
+              if (!delRes.ok) {
+                alert(delData.message || "Unable to delete update.");
+                return;
+              }
+              loadUpdates();
+            } catch (err) {
+              console.error(err);
+              alert("Network error while deleting update.");
+            }
+          });
+
+          div.appendChild(info);
+          div.appendChild(btn);
+          updatesListEl.appendChild(div);
+        });
+      } catch (err) {
+        console.error(err);
+        updatesListEl.innerHTML = "Error loading updates.";
+      }
+    }
+
+    // --- Quizzes ---
+
+    quizSubmit.addEventListener("click", async () => {
+      quizStatus.textContent = "";
+      quizStatus.className = "status";
+
+      const key = adminKeyInput.value.trim();
+      if (!key) {
+        quizStatus.textContent = "Enter admin key.";
+        quizStatus.classList.add("error");
+        return;
+      }
+
+      const question = quizQuestion.value.trim();
+      const options = [
+        quizOpt1.value.trim(),
+        quizOpt2.value.trim(),
+        quizOpt3.value.trim(),
+        quizOpt4.value.trim(),
+      ];
+      let correctIndex = parseInt(quizCorrect.value, 10);
+      const solution = quizSolution.value.trim();
+
+      if (!question) {
+        quizStatus.textContent = "Question is required.";
+        quizStatus.classList.add("error");
+        return;
+      }
+      if (!options[0] || !options[1]) {
+        quizStatus.textContent = "Please fill at least option 1 and option 2.";
+        quizStatus.classList.add("error");
+        return;
+      }
+      if (!options[correctIndex]) {
+        correctIndex = 0;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/admin/quizzes`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-admin-key": key,
+          },
+          body: JSON.stringify({ question, options, correctIndex, solution }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          quizStatus.textContent = data.message || "Unable to create quiz.";
+          quizStatus.classList.add("error");
+          return;
+        }
+
+        quizStatus.textContent = "Quiz created.";
+        quizStatus.classList.add("ok");
+        quizQuestion.value = "";
+        quizOpt1.value = "";
+        quizOpt2.value = "";
+        quizOpt3.value = "";
+        quizOpt4.value = "";
+        quizSolution.value = "";
+        loadQuizzes();
+      } catch (err) {
+        console.error(err);
+        quizStatus.textContent = "Network error.";
+        quizStatus.classList.add("error");
+      }
+    });
+
+    refreshQuizzesBtn.addEventListener("click", loadQuizzes);
+
+    async function loadQuizzes() {
+      quizzesListEl.innerHTML = "Loading...";
+      try {
+        const res = await fetch(`${API_BASE}/quizzes`);
+        const data = await res.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+          quizzesListEl.innerHTML = "No quizzes yet.";
+          return;
+        }
+
+        quizzesListEl.innerHTML = "";
+        const key = adminKeyInput.value.trim();
+
+        data.forEach((q) => {
+          const preview =
+            (q.question || "").length > 60
+              ? q.question.slice(0, 57) + "..."
+              : q.question || "Untitled question";
+
+          const div = document.createElement("div");
+          div.className = "list-item";
+          const info = document.createElement("div");
+          info.innerHTML = `
+            <div class="list-item-title">${preview}</div>
+            <div class="list-item-meta">${q.options.length} options${
+              q.solution ? " · has solution" : ""
+            }</div>
+          `;
+          const btn = document.createElement("button");
+          btn.textContent = "Delete";
+          btn.addEventListener("click", async () => {
+            if (!key) {
+              alert("Enter admin key first.");
+              return;
+            }
+            if (!confirm("Delete this quiz?")) return;
+            try {
+              const delRes = await fetch(`${API_BASE}/admin/quizzes/${q.id}`, {
+                method: "DELETE",
+                headers: { "x-admin-key": key },
+              });
+              const delData = await delRes.json();
+              if (!delRes.ok) {
+                alert(delData.message || "Unable to delete quiz.");
+                return;
+              }
+              loadQuizzes();
+            } catch (err) {
+              console.error(err);
+              alert("Network error while deleting quiz.");
+            }
+          });
+
+          div.appendChild(info);
+          div.appendChild(btn);
+          quizzesListEl.appendChild(div);
+        });
+      } catch (err) {
+        console.error(err);
+        quizzesListEl.innerHTML = "Error loading quizzes.";
+      }
+    }
+
+    // --- Time activity ---
+
+    refreshActivityBtn.addEventListener("click", loadActivity);
+
+    async function loadActivity() {
+      activityStatus.textContent = "";
+      activityStatus.className = "status";
+      activityTableWrapper.innerHTML = "Loading...";
+
+      const key = adminKeyInput.value.trim();
+      if (!key) {
+        activityStatus.textContent = "Enter admin key.";
+        activityStatus.classList.add("error");
+        activityTableWrapper.innerHTML = "";
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/admin/activity?adminKey=${encodeURIComponent(key)}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          activityStatus.textContent = data.message || "Unable to load activity.";
+          activityStatus.classList.add("error");
+          activityTableWrapper.innerHTML = "";
+          return;
+        }
+
+        if (!Array.isArray(data) || data.length === 0) {
+          activityTableWrapper.innerHTML = "No activity recorded yet.";
+          return;
+        }
+
+        activityStatus.textContent = "";
+        const rows = data
+          .map(
+            (a) => `
+          <tr>
+            <td>${a.name || "-"}</td>
+            <td>${a.email}</td>
+            <td>${a.totalMinutes}</td>
+            <td>${a.sessionsCount}</td>
+            <td>${a.isActive ? "Active" : "Inactive"}</td>
+          </tr>
+        `
+          )
+          .join("");
+
+        activityTableWrapper.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Total minutes</th>
+                <th>Sessions</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } catch (err) {
+        console.error(err);
+        activityStatus.textContent = "Network error.";
+        activityStatus.classList.add("error");
+        activityTableWrapper.innerHTML = "";
+      }
+    }
+
+    // --- Quiz activity (attempts) ---
+
+    refreshQuizActivityBtn.addEventListener("click", loadQuizActivity);
+
+    async function loadQuizActivity() {
+      quizActivityStatus.textContent = "";
+      quizActivityStatus.className = "status";
+      quizActivityWrapper.innerHTML = "Loading...";
+
+      const key = adminKeyInput.value.trim();
+      if (!key) {
+        quizActivityStatus.textContent = "Enter admin key.";
+        quizActivityStatus.classList.add("error");
+        quizActivityWrapper.innerHTML = "";
+        return;
+      }
+
+      try {
+        const res = await fetch(
+          `${API_BASE}/admin/quiz-activity?adminKey=${encodeURIComponent(key)}`
+        );
+        const data = await res.json();
+
+        if (!res.ok) {
+          quizActivityStatus.textContent = data.message || "Unable to load quiz activity.";
+          quizActivityStatus.classList.add("error");
+          quizActivityWrapper.innerHTML = "";
+          return;
+        }
+
+        if (!Array.isArray(data) || data.length === 0) {
+          quizActivityWrapper.innerHTML = "No quiz attempts recorded yet.";
+          return;
+        }
+
+        const rows = data
+          .map(
+            (a) => `
+          <tr>
+            <td>${a.name || "-"}</td>
+            <td>${a.email}</td>
+            <td>${a.quizTitle}</td>
+            <td>${a.correct ? "✔" : "✖"}</td>
+            <td>${a.selectedIndex + 1}</td>
+            <td>${a.createdAt ? new Date(a.createdAt).toLocaleString() : "-"}</td>
+          </tr>
+        `
+          )
+          .join("");
+
+        quizActivityWrapper.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Quiz</th>
+                <th>Correct?</th>
+                <th>Option</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
+      } catch (err) {
+        console.error(err);
+        quizActivityStatus.textContent = "Network error.";
+        quizActivityStatus.classList.add("error");
+        quizActivityWrapper.innerHTML = "";
+      }
+    }
+
+    // initial
+    loadUpdates();
+    loadQuizzes();
+  </script>
+</body>
+</html>
