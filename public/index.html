@@ -6,34 +6,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
-      --bg: #050816;  
-      --bg-light: #0f172a;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.1);
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --danger: #f97373;
-      --success: #22c55e;
+      --bg: #ffffff;  
+      --bg-light: #f8fafc;
+      --accent: #7c3aed;
+      --accent-soft: rgba(124, 58, 237, 0.1);
+      --text: #1e293b;
+      --muted: #64748b;
+      --danger: #ef4444;
+      --success: #10b981;
       --card-radius: 18px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.7);
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.08);
+      --border-color: #e2e8f0;
+    }
+
+    body.dark-mode {
+      --bg: #0f172a;  
+      --bg-light: #1e293b;
+      --accent: #a78bfa;
+      --accent-soft: rgba(167, 139, 250, 0.15);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --danger: #f87171;
+      --success: #34d399;
+      --border-color: #334155;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
     }
 
     body {
       min-height: 100vh;
-      background: radial-gradient(circle at top, #1f2937 0, #020617 45%, #000 100%);
+      background: linear-gradient(135deg, var(--bg) 0%, var(--bg-light) 100%);
       color: var(--text);
       display: flex;
       align-items: stretch;
       justify-content: center;
-      transition: 0.25s;
+      transition: 0.3s;
     }
 
     .app-container {
@@ -41,27 +53,75 @@
       max-width: 1200px;
       margin: 24px;
       display: flex;
+      flex-direction: column;
       border-radius: 30px;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(2, 6, 23, 0.98));
+      background: var(--bg-light);
       box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      transition: 0.25s;
+      border: 1px solid var(--border-color);
+      transition: 0.3s;
+    }
+
+    /* HEADER */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 28px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(90deg, var(--bg-light), var(--bg));
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-toggle {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid var(--border-color);
+      background: var(--bg);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      transform: scale(1.05);
     }
 
     body.dashboard-mode .hero-pane {
       display: none;
     }
-    body.dashboard-mode .app-container {
-      max-width: 1100px;
-      margin: 24px auto;
+
+    .main-container {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
     }
 
     .hero-pane {
       flex: 1.1;
       padding: 32px;
-      background: radial-gradient(circle at top left, #0f172a 0, #020617 45%, #000 100%);
-      border-right: 1px solid rgba(148, 163, 184, 0.25);
+      background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg) 100%);
+      border-right: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -72,20 +132,20 @@
       align-items: center;
       gap: 10px;
       font-weight: 700;
-      font-size: 20px;
-      letter-spacing: 0.05em;
+      font-size: 18px;
+      color: var(--text);
     }
 
     .logo-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      border: 2px solid var(--accent);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      box-shadow: 0 0 18px rgba(56, 189, 248, 0.9);
+      font-size: 20px;
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
     }
 
     .hero-main {
@@ -96,29 +156,35 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
+      padding: 6px 12px;
       border-radius: 999px;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.15em;
-      border: 1px solid rgba(56, 189, 248, 0.5);
-      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--accent);
+      background: var(--accent-soft);
       color: var(--accent);
     }
 
     .tag-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 999px;
       background: var(--accent);
-      box-shadow: 0 0 8px rgba(56, 189, 248, 0.9);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
 
     .hero-title {
       margin-top: 16px;
       font-size: 32px;
       line-height: 1.2;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--text);
     }
 
     .hero-title span {
@@ -130,7 +196,7 @@
       font-size: 14px;
       color: var(--muted);
       max-width: 360px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .hero-badges {
@@ -142,21 +208,27 @@
 
     .pill {
       font-size: 11px;
-      padding: 5px 10px;
+      padding: 7px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
+      border: 1px solid var(--border-color);
       color: var(--muted);
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(15, 23, 42, 0.7);
+      background: var(--bg);
+      transition: 0.2s;
+    }
+
+    .pill:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
     }
 
     .pill-dot {
-      width: 7px;
-      height: 7px;
+      width: 6px;
+      height: 6px;
       border-radius: 999px;
-      background: rgba(56, 189, 248, 0.7);
+      background: var(--accent);
     }
 
     .hero-footer {
@@ -169,25 +241,22 @@
       flex-wrap: wrap;
     }
 
-    .hero-footer span {
-      opacity: 0.85;
-    }
-
     .main-pane {
       flex: 1.1;
       padding: 28px;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
 
     .auth-card {
       margin: auto;
-      max-width: 380px;
+      max-width: 420px;
       width: 100%;
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.98));
-      padding: 24px 22px 22px 22px;
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.55);
+      background: var(--bg);
+      padding: 32px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
       box-shadow: var(--shadow-soft);
     }
 
@@ -195,125 +264,136 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .auth-title {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
     }
 
     .auth-subtitle {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--muted);
     }
 
     .auth-tabs {
       display: flex;
-      margin-bottom: 18px;
-      padding: 3px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.5);
+      margin-bottom: 20px;
+      padding: 4px;
+      border-radius: 12px;
+      background: var(--bg-light);
+      border: 1px solid var(--border-color);
+      gap: 4px;
     }
 
     .auth-tab {
       flex: 1;
-      padding: 6px 0;
-      font-size: 12px;
-      border-radius: 999px;
+      padding: 10px 0;
+      font-size: 13px;
+      border-radius: 10px;
       text-align: center;
       cursor: pointer;
       border: none;
       background: transparent;
       color: var(--muted);
-      transition: 0.18s;
+      transition: 0.2s;
+      font-weight: 500;
     }
 
     .auth-tab.active {
-      background: radial-gradient(circle at top left, #38bdf8, #0ea5e9);
-      color: #0f172a;
+      background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+      color: white;
       font-weight: 600;
-      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.4);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
     }
 
     form {
       margin-top: 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
     }
 
     .field {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
 
     label {
-      font-size: 11px;
-      color: var(--muted);
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 500;
     }
 
     input {
-      padding: 8px 9px;
+      padding: 10px 12px;
       border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      background: var(--bg);
       color: var(--text);
       font-size: 13px;
       outline: none;
-      transition: 0.18s;
+      transition: 0.2s;
     }
 
     input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 0 3px var(--accent-soft);
     }
 
     .hint {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--muted);
     }
 
     .btn-primary {
-      margin-top: 6px;
-      padding: 8px 0;
-      border-radius: 12px;
+      margin-top: 8px;
+      padding: 11px 0;
+      border-radius: 10px;
       border: none;
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      color: #0b1220;
+      background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+      color: white;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
-      box-shadow: 0 14px 30px rgba(56, 189, 248, 0.5);
+      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
       transition: transform 0.15s, box-shadow 0.15s;
     }
 
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(124, 58, 237, 0.4);
+    }
+
     .btn-primary:active {
-      transform: translateY(1px);
-      box-shadow: 0 8px 18px rgba(56, 189, 248, 0.4);
+      transform: translateY(0);
     }
 
     .error-text {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--danger);
-      min-height: 16px;
+      min-height: 18px;
       margin-top: 4px;
     }
 
     .success-text {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--success);
-      min-height: 16px;
+      min-height: 18px;
       margin-top: 4px;
     }
 
     .info-note {
-      margin-top: 10px;
-      font-size: 10px;
+      margin-top: 12px;
+      font-size: 11px;
       color: var(--muted);
-      line-height: 1.4;
+      line-height: 1.5;
+      padding: 10px;
+      background: var(--accent-soft);
+      border-radius: 8px;
     }
 
     /* DASHBOARD */
@@ -330,12 +410,15 @@
       justify-content: space-between;
       align-items: center;
       gap: 14px;
-      margin-bottom: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .dash-title {
-      font-size: 20px;
-      font-weight: 600;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
     }
 
     .dash-title span {
@@ -343,275 +426,338 @@
     }
 
     .dash-subtitle {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--muted);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .user-chip {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 11px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.9);
-      font-size: 11px;
+      gap: 10px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg);
+      font-size: 12px;
     }
 
     .user-avatar {
-      width: 22px;
-      height: 22px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #38bdf8, #0f172a);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 600;
+      color: white;
     }
 
     .logout-btn {
       border: none;
       background: transparent;
       font-size: 11px;
-      color: var(--muted);
+      color: var(--danger);
       cursor: pointer;
-      margin-left: 4px;
       text-decoration: underline;
-      text-decoration-style: dotted;
     }
 
     .dash-nav {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .nav-btn {
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.9);
-      padding: 5px 10px;
-      font-size: 11px;
+      border: 1px solid var(--border-color);
+      background: var(--bg);
+      padding: 8px 16px;
+      font-size: 12px;
       color: var(--muted);
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
     }
 
     .nav-btn.nav-active {
       border-color: var(--accent);
-      color: #e0f2fe;
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.7);
-      background: rgba(15, 23, 42, 0.95);
+      color: white;
+      background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+      box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);
     }
 
     .dash-grid {
       display: grid;
       grid-template-columns: 2fr 1.5fr;
-      gap: 14px;
+      gap: 16px;
       flex: 1;
       align-items: flex-start;
     }
 
     .card {
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.9));
+      background: var(--bg);
       border-radius: 16px;
-      padding: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.9);
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-height: 120px;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      gap: 12px;
+      min-height: 140px;
+      transition: all 0.3s ease;
     }
 
     .card:hover {
-      border-color: rgba(56, 189, 248, 0.6);
-      box-shadow: 0 0 24px rgba(56, 189, 248, 0.24);
-      transform: translateY(-1px);
+      border-color: var(--accent);
+      box-shadow: 0 12px 32px rgba(124, 58, 237, 0.15);
+      transform: translateY(-4px);
     }
 
     #card-quizzes:hover {
-      border-color: rgba(56, 189, 248, 0.95);
-      box-shadow: 0 0 32px rgba(56, 189, 248, 0.45);
+      border-color: var(--accent);
+      box-shadow: 0 16px 40px rgba(124, 58, 237, 0.25);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
 
     .card-title {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      color: var(--text);
     }
 
     .card-badge {
-      font-size: 10px;
-      padding: 3px 7px;
+      font-size: 11px;
+      padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(56, 189, 248, 0.6);
+      border: 1px solid var(--accent);
       color: var(--accent);
-      background: rgba(15, 23, 42, 0.7);
+      background: var(--accent-soft);
+      white-space: nowrap;
     }
 
     .card-content {
-      font-size: 11px;
+      font-size: 13px;
       color: var(--muted);
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .tip-highlight {
-      padding: 7px 8px;
-      border-radius: 10px;
+      padding: 12px;
+      border-radius: 12px;
       background: var(--accent-soft);
-      border: 1px dashed rgba(56, 189, 248, 0.5);
-      font-size: 11px;
-      color: #e0f2fe;
+      border: 1px solid var(--accent);
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 500;
     }
 
     .badge-soft {
       display: inline-block;
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      margin-top: 4px;
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-light);
+      margin-top: 8px;
+      color: var(--muted);
     }
 
     .card-list {
-      margin-top: 2px;
-      padding-left: 16px;
+      margin-top: 8px;
+      padding-left: 20px;
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 8px;
     }
 
     .card-list li {
-      font-size: 11px;
+      font-size: 12px;
       color: var(--muted);
     }
 
     .update-item {
-      font-size: 11px;
-      padding: 6px 7px;
-      border-radius: 10px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
-      margin-bottom: 6px;
+      font-size: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg);
+      margin-bottom: 8px;
+      transition: 0.2s;
+    }
+
+    .update-item:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
     }
 
     .update-title {
       font-weight: 600;
-      margin-bottom: 2px;
-      font-size: 11px;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: var(--text);
     }
 
     .update-meta {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--muted);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
-    .quiz-list {
-      display: none; /* not using titles list now */
+    .quiz-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .quiz-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .quiz-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .quiz-btn.active {
+      background: linear-gradient(135deg, var(--accent) 0%, #6d28d9 100%);
+      color: white;
+      border-color: var(--accent);
     }
 
     .quiz-option {
-      margin-top: 5px;
-      padding: 7px 8px;
+      margin-top: 8px;
+      padding: 12px;
       border-radius: 12px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      font-size: 11px;
+      border: 1px solid var(--border-color);
+      font-size: 12px;
       cursor: pointer;
-      transition: 0.18s;
-      background: rgba(15, 23, 42, 0.9);
+      transition: 0.2s;
+      background: var(--bg);
+      color: var(--text);
     }
 
     .quiz-option:hover {
       border-color: var(--accent);
-      transform: translateY(-1px);
-      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4);
+      background: var(--accent-soft);
+      transform: translateX(2px);
     }
 
     .quiz-option.correct {
       border-color: var(--success);
-      background: rgba(34, 197, 94, 0.12);
-      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.4);
+      background: rgba(16, 185, 129, 0.1);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
       animation: pulseGreen 0.5s ease-out;
+      color: var(--success);
+      font-weight: 500;
     }
 
     .quiz-option.wrong {
       border-color: var(--danger);
-      background: rgba(248, 113, 113, 0.06);
-      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.5);
+      background: rgba(239, 68, 68, 0.1);
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
       animation: pulseRed 0.4s ease-out;
+      color: var(--danger);
     }
 
     @keyframes pulseGreen {
       0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
+      50% { transform: scale(1.03); }
       100% { transform: scale(1); }
     }
 
     @keyframes pulseRed {
       0% { transform: scale(1); }
-      50% { transform: scale(0.98); }
+      50% { transform: scale(0.97); }
       100% { transform: scale(1); }
     }
 
     .quiz-footer {
-      margin-top: 6px;
+      margin-top: 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 10px;
+      font-size: 11px;
       color: var(--muted);
     }
 
     .quiz-next-btn {
-      font-size: 10px;
-      border-radius: 999px;
-      padding: 4px 10px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: rgba(15, 23, 42, 0.9);
+      font-size: 12px;
+      border-radius: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--border-color);
+      background: var(--bg);
       color: var(--text);
       cursor: pointer;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+
+    .quiz-next-btn:hover {
+      border-color: var(--accent);
+      background: var(--accent-soft);
     }
 
     /* checklist */
     .checklist-item {
       display: flex;
       align-items: flex-start;
-      gap: 6px;
-      margin-bottom: 4px;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .checklist-item input {
+      margin-top: 3px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .checklist-note {
       font-size: 11px;
       color: var(--muted);
-    }
-    .checklist-item input {
-      margin-top: 2px;
-    }
-    .checklist-note {
-      font-size: 10px;
-      color: var(--muted);
-      margin-top: 4px;
+      margin-top: 8px;
+      padding: 8px;
+      background: var(--accent-soft);
+      border-radius: 8px;
     }
 
     @media (max-width: 960px) {
       .app-container {
-        flex-direction: column;
         margin: 12px;
+      }
+      .main-container {
+        flex-direction: column;
       }
       .hero-pane {
         border-right: none;
-        border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        border-bottom: 1px solid var(--border-color);
       }
       .dash-grid {
         grid-template-columns: 1fr;
@@ -627,333 +773,363 @@
         border-radius: 0;
       }
       .main-pane {
-        padding: 18px;
+        padding: 16px;
       }
       .auth-card {
         box-shadow: none;
-        border-radius: 20px;
+        padding: 24px;
+      }
+      .top-header {
+        padding: 12px 16px;
+      }
+      .header-title {
+        font-size: 18px;
       }
     }
   </style>
 </head>
 <body>
   <div class="app-container">
-    <!-- LEFT HERO -->
-    <div class="hero-pane">
-      <div>
-        <div class="logo">
-          <div class="logo-mark">🔒</div>
-          <div>CyberShield EDU</div>
-        </div>
-
-        <div class="hero-main">
-          <div class="tag">
-            <span class="tag-dot"></span> Student Cyber Safety Hub
-          </div>
-          <h1 class="hero-title">
-            Learn to stay <span>safe</span><br />on the internet.
-          </h1>
-          <p class="hero-subtitle">
-            Learn how to avoid scams, protect your accounts, and stay safe on social media and public networks.
-          </p>
-
-          <div class="hero-badges">
-            <div class="pill"><span class="pill-dot"></span> Phishing & scams</div>
-            <div class="pill"><span class="pill-dot"></span> Strong passwords</div>
-            <div class="pill"><span class="pill-dot"></span> Social media safety</div>
-            <div class="pill"><span class="pill-dot"></span> Digital footprint</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-footer">
-        <span>Designed for schools and colleges.</span>
-        <span>Login to receive regular cyber security guidance.</span>
+    <!-- TOP HEADER -->
+    <div class="top-header">
+      <div class="header-title">🔐 CyberShield EDU</div>
+      <div class="header-controls">
+        <button class="theme-toggle" id="theme-toggle" title="Toggle theme">🌙</button>
       </div>
     </div>
 
-    <!-- RIGHT SIDE -->
-    <div class="main-pane">
-      <!-- AUTH SECTION -->
-      <div id="auth-section">
-        <div class="auth-card">
-          <div class="auth-header">
-            <div>
-              <div class="auth-title" id="auth-title">Welcome back 👋</div>
-              <div class="auth-subtitle" id="auth-subtitle">
-                Login to access your cyber safety dashboard.
-              </div>
-            </div>
+    <div class="main-container">
+      <!-- LEFT HERO -->
+      <div class="hero-pane">
+        <div>
+          <div class="logo">
+            <div class="logo-mark">🔒</div>
+            <div>CyberShield</div>
           </div>
 
-          <div class="auth-tabs">
-            <button class="auth-tab active" id="login-tab">Login</button>
-            <button class="auth-tab" id="signup-tab">Sign up</button>
+          <div class="hero-main">
+            <div class="tag">
+              <span class="tag-dot"></span> Student Cyber Safety Hub
+            </div>
+            <h1 class="hero-title">
+              Learn to stay <span>safe</span><br />online.
+            </h1>
+            <p class="hero-subtitle">
+              Learn how to avoid scams, protect your accounts, and stay safe on social media and public networks.
+            </p>
+
+            <div class="hero-badges">
+              <div class="pill"><span class="pill-dot"></span> Phishing & scams</div>
+              <div class="pill"><span class="pill-dot"></span> Strong passwords</div>
+              <div class="pill"><span class="pill-dot"></span> Social media safety</div>
+              <div class="pill"><span class="pill-dot"></span> Digital footprint</div>
+            </div>
           </div>
+        </div>
 
-          <!-- LOGIN FORM -->
-          <form id="login-form">
-            <div class="field">
-              <label for="login-email">Email</label>
-              <input
-                type="email"
-                id="login-email"
-                placeholder="you@example.com"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="login-password">Password</label>
-              <input
-                type="password"
-                id="login-password"
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-
-            <button type="submit" class="btn-primary">Login</button>
-            <div id="login-message" class="error-text"></div>
-
-            <p class="info-note">
-              Use the same email and password each time to keep your learning history consistent.
-            </p>
-          </form>
-
-          <!-- SIGNUP FORM -->
-          <form id="signup-form" style="display: none">
-            <div class="field">
-              <label for="signup-name">Full Name</label>
-              <input
-                type="text"
-                id="signup-name"
-                placeholder="E.g., Priya Sharma"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="signup-email">Email</label>
-              <input
-                type="email"
-                id="signup-email"
-                placeholder="yourname@gmail.com"
-                required
-              />
-              <span class="hint">Use the email where you want to receive cyber safety updates.</span>
-            </div>
-
-            <div class="field">
-              <label for="signup-phone">Phone Number</label>
-              <input
-                type="tel"
-                id="signup-phone"
-                placeholder="10-digit mobile number"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="signup-password">Create Password</label>
-              <input
-                type="password"
-                id="signup-password"
-                placeholder="Minimum 6 characters"
-                required
-              />
-            </div>
-
-            <div class="field">
-              <label for="signup-confirm">Confirm Password</label>
-              <input
-                type="password"
-                id="signup-confirm"
-                placeholder="Re-enter password"
-                required
-              />
-            </div>
-
-            <button type="submit" class="btn-primary">Create account</button>
-            <div id="signup-message" class="success-text"></div>
-
-            <p class="info-note">
-              This account is only for cyber security learning and awareness activities.
-            </p>
-          </form>
+        <div class="hero-footer">
+          <span>Designed for schools and colleges.</span>
+          <span>Login to receive regular cyber security guidance.</span>
         </div>
       </div>
 
-      <!-- DASHBOARD SECTION -->
-      <div id="dashboard" class="dashboard">
-        <div class="dash-header">
-          <div>
-            <div class="dash-title">
-              Hi, <span id="user-name-display"></span> 👋
+      <!-- RIGHT SIDE -->
+      <div class="main-pane">
+        <!-- AUTH SECTION -->
+        <div id="auth-section">
+          <div class="auth-card">
+            <div class="auth-header">
+              <div>
+                <div class="auth-title" id="auth-title">Welcome back 👋</div>
+                <div class="auth-subtitle" id="auth-subtitle">
+                  Login to access your cyber safety dashboard.
+                </div>
+              </div>
             </div>
-            <div class="dash-subtitle">
-              Use the sections below to learn, attempt quizzes and build strong cyber habits.
+
+            <div class="auth-tabs">
+              <button class="auth-tab active" id="login-tab">Login</button>
+              <button class="auth-tab" id="signup-tab">Sign up</button>
             </div>
+
+            <!-- LOGIN FORM -->
+            <form id="login-form">
+              <div class="field">
+                <label for="login-email">Email</label>
+                <input
+                  type="email"
+                  id="login-email"
+                  placeholder="you@example.com"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="login-password">Password</label>
+                <input
+                  type="password"
+                  id="login-password"
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+
+              <button type="submit" class="btn-primary">Login</button>
+              <div id="login-message" class="error-text"></div>
+
+              <p class="info-note">
+                Use the same email and password each time to keep your learning history consistent.
+              </p>
+            </form>
+
+            <!-- SIGNUP FORM -->
+            <form id="signup-form" style="display: none">
+              <div class="field">
+                <label for="signup-name">Full Name</label>
+                <input
+                  type="text"
+                  id="signup-name"
+                  placeholder="E.g., Priya Sharma"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="signup-email">Email</label>
+                <input
+                  type="email"
+                  id="signup-email"
+                  placeholder="yourname@gmail.com"
+                  required
+                />
+                <span class="hint">Use the email where you want to receive cyber safety updates.</span>
+              </div>
+
+              <div class="field">
+                <label for="signup-phone">Phone Number</label>
+                <input
+                  type="tel"
+                  id="signup-phone"
+                  placeholder="10-digit mobile number"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="signup-password">Create Password</label>
+                <input
+                  type="password"
+                  id="signup-password"
+                  placeholder="Minimum 6 characters"
+                  required
+                />
+              </div>
+
+              <div class="field">
+                <label for="signup-confirm">Confirm Password</label>
+                <input
+                  type="password"
+                  id="signup-confirm"
+                  placeholder="Re-enter password"
+                  required
+                />
+              </div>
+
+              <button type="submit" class="btn-primary">Create account</button>
+              <div id="signup-message" class="success-text"></div>
+
+              <p class="info-note">
+                This account is only for cyber security learning and awareness activities.
+              </p>
+            </form>
           </div>
-          <div class="user-chip">
-            <div class="user-avatar" id="user-avatar">U</div>
+        </div>
+
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard" class="dashboard">
+          <div class="dash-header">
             <div>
-              <div id="user-email-display" style="font-size: 11px"></div>
-              <button class="logout-btn" id="logout-btn">Logout</button>
+              <div class="dash-title">
+                Hi, <span id="user-name-display"></span> 👋
+              </div>
+              <div class="dash-subtitle">
+                Use the sections below to learn, attempt quizzes and build strong cyber habits.
+              </div>
+            </div>
+            <div class="user-chip">
+              <div class="user-avatar" id="user-avatar">U</div>
+              <div>
+                <div id="user-email-display" style="font-size: 11px"></div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="dash-nav">
+            <button class="nav-btn nav-active" data-target="overview">Overview</button>
+            <button class="nav-btn" data-target="lessons">Learn lessons</button>
+            <button class="nav-btn" data-target="quizzes">Quizzes</button>
+            <button class="nav-btn" data-target="attacks">Common attacks</button>
+          </div>
+
+          <div class="dash-grid">
+            <!-- Highlight -->
+            <div class="card" id="card-highlight">
+              <div class="card-header">
+                <div class="card-title">🔐 Highlight of the day</div>
+                <div class="card-badge" id="tip-badge">Tip</div>
+              </div>
+              <div class="card-content">
+                <p class="tip-highlight" id="tip-text">Loading...</p>
+                <p style="margin-top: 6px; font-size: 12px;">
+                  Review this whenever you log in. One small step each day keeps your accounts safer.
+                </p>
+              </div>
+            </div>
+
+            <!-- Streak & rewards -->
+            <div class="card" id="card-streak">
+              <div class="card-header">
+                <div class="card-title">🔥 Your learning streak</div>
+                <div class="card-badge" id="streak-level">New learner</div>
+              </div>
+              <div class="card-content">
+                <p>
+                  Current streak: <strong><span id="streak-days">0</span> day(s)</strong><br />
+                  Longest streak: <strong><span id="streak-best">0</span> day(s)</strong><br />
+                  Total points: <strong><span id="streak-points">0</span></strong>
+                </p>
+                <p style="margin-top: 6px" id="streak-message">
+                  Open CyberShield daily to grow your streak and unlock higher levels.
+                </p>
+                <span class="badge-soft">
+                  Daily login: +10 pts · Quiz correct: bonus points · Milestones unlock higher titles
+                </span>
+              </div>
+            </div>
+
+            <!-- Lessons / updates -->
+            <div class="card" id="card-lessons">
+              <div class="card-header">
+                <div class="card-title">📚 Learn lessons & updates</div>
+              </div>
+              <div class="card-content" id="updates-list"></div>
+            </div>
+
+            <!-- Common attacks -->
+            <div class="card" id="card-attacks">
+              <div class="card-header">
+                <div class="card-title">⚠️ Common online risks for students</div>
+                <div class="card-badge">Awareness</div>
+              </div>
+              <div class="card-content">
+                <ul class="card-list">
+                  <li>
+                    <strong>Phishing messages:</strong> Fake mails or messages pretending to be from college, bank or teachers asking for passwords or OTPs.
+                  </li>
+                  <li>
+                    <strong>Free Wi-Fi traps:</strong> Attackers capturing usernames and passwords on open networks.
+                  </li>
+                  <li>
+                    <strong>Fake job / internship offers:</strong> Asking for money or personal details in the name of registration or verification.
+                  </li>
+                  <li>
+                    <strong>Account takeover:</strong> Weak passwords and reused passwords between apps making it easy to break in.
+                  </li>
+                </ul>
+                <span class="badge-soft">
+                  If a message feels urgent, emotional and asks for money or data, pause and verify before you react.
+                </span>
+              </div>
+            </div>
+
+            <!-- Personal security checklist -->
+            <div class="card" id="card-checklist">
+              <div class="card-header">
+                <div class="card-title">🛡️ Personal security checklist</div>
+                <div class="card-badge">Habits</div>
+              </div>
+              <div class="card-content" id="checklist-content">
+                <div class="checklist-item">
+                  <input type="checkbox" data-key="2fa_email" />
+                  <span>I have turned on 2-step verification (OTP / app) for my main email account.</span>
+                </div>
+                <div class="checklist-item">
+                  <input type="checkbox" data-key="strong_passwords" />
+                  <span>I use strong & unique passwords for important accounts (email, banking, UPI).</span>
+                </div>
+                <div class="checklist-item">
+                  <input type="checkbox" data-key="no_otp_share" />
+                  <span>I never share passwords or OTPs with anyone, even if they say they are from bank / company support.</span>
+                </div>
+                <div class="checklist-item">
+                  <input type="checkbox" data-key="public_wifi_care" />
+                  <span>I avoid logging into banking / UPI apps on public or unknown Wi-Fi networks.</span>
+                </div>
+                <div class="checklist-item">
+                  <input type="checkbox" data-key="privacy_settings" />
+                  <span>I regularly check privacy settings of my social media accounts.</span>
+                </div>
+                <div class="checklist-item">
+                  <input type="checkbox" data-key="verify_links" />
+                  <span>I always verify links and senders before clicking on unexpected attachments or "payment" links.</span>
+                </div>
+                <div class="checklist-note">
+                  These items are stored only in your browser for your account and help you track how safe your habits are.
+                </div>
+              </div>
+            </div>
+
+            <!-- Quizzes -->
+            <div class="card" id="card-quizzes">
+              <div class="card-header">
+                <div class="card-title">✅ Cyber quiz zone</div>
+                <div class="card-badge" id="quiz-progress">Press button</div>
+              </div>
+              <div class="card-content">
+                <div class="quiz-controls">
+                  <button id="load-quizzes-btn" class="quiz-btn active">📂 Show quizzes</button>
+                  <button id="close-quizzes-btn" class="quiz-btn" style="display: none;">✕ Hide quizzes</button>
+                </div>
+                <div class="quiz-list" id="quiz-list"></div>
+                <div id="quiz-question-area"></div>
+                <div class="quiz-footer">
+                  <span id="quiz-feedback">Click "Show quizzes" to begin.</span>
+                  <button class="quiz-next-btn" id="quiz-next-btn">Next quiz ➜</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-
-        <div class="dash-nav">
-          <button class="nav-btn nav-active" data-target="overview">Overview</button>
-          <button class="nav-btn" data-target="lessons">Learn lessons</button>
-          <button class="nav-btn" data-target="quizzes">Quizzes</button>
-          <button class="nav-btn" data-target="attacks">Common attacks</button>
-        </div>
-
-        <div class="dash-grid">
-          <!-- Highlight -->
-          <div class="card" id="card-highlight">
-            <div class="card-header">
-              <div class="card-title">
-                🔐 Highlight of the day
-              </div>
-              <div class="card-badge" id="tip-badge">Tip</div>
-            </div>
-            <div class="card-content">
-              <p class="tip-highlight" id="tip-text">
-                Loading...
-              </p>
-              <p style="margin-top: 6px">
-                Review this whenever you log in. One small step each day keeps your accounts safer.
-              </p>
-            </div>
-          </div>
-
-          <!-- Streak & rewards -->
-          <div class="card" id="card-streak">
-            <div class="card-header">
-              <div class="card-title">🔥 Your learning streak</div>
-              <div class="card-badge" id="streak-level">New learner</div>
-            </div>
-            <div class="card-content">
-              <p>
-                Current streak: <strong><span id="streak-days">0</span> day(s)</strong><br />
-                Longest streak: <strong><span id="streak-best">0</span> day(s)</strong><br />
-                Total points: <strong><span id="streak-points">0</span></strong>
-              </p>
-              <p style="margin-top: 6px" id="streak-message">
-                Open CyberShield daily to grow your streak and unlock higher levels.
-              </p>
-              <span class="badge-soft">
-                Daily login: +10 pts · Quiz correct: bonus points · Milestones unlock higher titles
-              </span>
-            </div>
-          </div>
-
-          <!-- Lessons / updates -->
-          <div class="card" id="card-lessons">
-            <div class="card-header">
-              <div class="card-title">📚 Learn lessons & updates</div>
-            </div>
-            <div class="card-content" id="updates-list">
-            </div>
-          </div>
-
-          <!-- Common attacks -->
-          <div class="card" id="card-attacks">
-            <div class="card-header">
-              <div class="card-title">⚠️ Common online risks for students</div>
-              <div class="card-badge">Awareness</div>
-            </div>
-            <div class="card-content">
-              <ul class="card-list">
-                <li>
-                  <strong>Phishing messages:</strong> Fake mails or messages pretending to be from college, bank or teachers asking for passwords or OTPs.
-                </li>
-                <li>
-                  <strong>Free Wi-Fi traps:</strong> Attackers capturing usernames and passwords on open networks.
-                </li>
-                <li>
-                  <strong>Fake job / internship offers:</strong> Asking for money or personal details in the name of registration or verification.
-                </li>
-                <li>
-                  <strong>Account takeover:</strong> Weak passwords and reused passwords between apps making it easy to break in.
-                </li>
-              </ul>
-              <span class="badge-soft">
-                If a message feels urgent, emotional and asks for money or data, pause and verify before you react.
-              </span>
-            </div>
-          </div>
-
-          <!-- Personal security checklist -->
-          <div class="card" id="card-checklist">
-            <div class="card-header">
-              <div class="card-title">🛡️ Personal security checklist</div>
-              <div class="card-badge">Habits</div>
-            </div>
-            <div class="card-content" id="checklist-content">
-              <div class="checklist-item">
-                <input type="checkbox" data-key="2fa_email" />
-                <span>I have turned on 2-step verification (OTP / app) for my main email account.</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="strong_passwords" />
-                <span>I use strong & unique passwords for important accounts (email, banking, UPI).</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="no_otp_share" />
-                <span>I never share passwords or OTPs with anyone, even if they say they are from bank / company support.</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="public_wifi_care" />
-                <span>I avoid logging into banking / UPI apps on public or unknown Wi-Fi networks.</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="privacy_settings" />
-                <span>I regularly check privacy settings of my social media accounts.</span>
-              </div>
-              <div class="checklist-item">
-                <input type="checkbox" data-key="verify_links" />
-                <span>I always verify links and senders before clicking on unexpected attachments or “payment” links.</span>
-              </div>
-              <div class="checklist-note">
-                These items are stored only in your browser for your account and help you track how safe your habits are.
-              </div>
-            </div>
-          </div>
-
-          <!-- Quizzes -->
-          <div class="card" id="card-quizzes">
-            <div class="card-header">
-              <div class="card-title">✅ Cyber quiz zone</div>
-              <div class="card-badge" id="quiz-progress">Press button</div>
-            </div>
-            <div class="card-content">
-              <button id="load-quizzes-btn" class="quiz-next-btn" style="margin-bottom:6px;">
-                Show quizzes
-              </button>
-              <div class="quiz-list" id="quiz-list"></div>
-              <div id="quiz-question-area"></div>
-              <div class="quiz-footer">
-                <span id="quiz-feedback">Click “Show quizzes” to begin.</span>
-                <button class="quiz-next-btn" id="quiz-next-btn">Next quiz</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- END DASHBOARD -->
       </div>
-      <!-- END DASHBOARD -->
     </div>
   </div>
 
   <script>
-    const API_BASE = "/api";
+    const API_BASE = "http://localhost:5000/api";
 
     let currentUser = null;
     let quizzes = [];
     let currentQuizIndex = 0;
+
+    // Theme toggle
+    const themeToggle = document.getElementById("theme-toggle");
+    const htmlElement = document.documentElement;
+
+    // Check saved theme preference
+    const savedTheme = localStorage.getItem("theme") || "light";
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark-mode");
+      themeToggle.textContent = "☀️";
+    }
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDarkMode = document.body.classList.contains("dark-mode");
+      localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+      themeToggle.textContent = isDarkMode ? "☀️" : "🌙";
+    });
 
     // Auth elements
     const loginTab = document.getElementById("login-tab");
@@ -998,6 +1174,7 @@
     const quizProgress = document.getElementById("quiz-progress");
     const quizNextBtn = document.getElementById("quiz-next-btn");
     const loadQuizzesBtn = document.getElementById("load-quizzes-btn");
+    const closeQuizzesBtn = document.getElementById("close-quizzes-btn");
 
     // Login/Signup tabs
     loginTab.addEventListener("click", () => {
@@ -1219,8 +1396,10 @@
 
       quizzes = [];
       quizArea.innerHTML = "";
-      quizFeedback.textContent = "Click “Show quizzes” to load all available quizzes.";
+      quizFeedback.textContent = "Click \"Show quizzes\" to load all available quizzes.";
       quizProgress.textContent = "Press button";
+      closeQuizzesBtn.style.display = "none";
+      loadQuizzesBtn.style.display = "block";
     }
 
     // Nav scroll behaviour
@@ -1305,9 +1484,20 @@
       });
     }
 
-    // Quizzes
+    // Quizzes - Show/Hide Toggle
     loadQuizzesBtn.addEventListener("click", () => {
       loadQuizzesFromBackend();
+      loadQuizzesBtn.style.display = "none";
+      closeQuizzesBtn.style.display = "block";
+    });
+
+    closeQuizzesBtn.addEventListener("click", () => {
+      quizArea.innerHTML = "";
+      quizFeedback.textContent = "Click \"Show quizzes\" to load all available quizzes.";
+      quizProgress.textContent = "Press button";
+      closeQuizzesBtn.style.display = "none";
+      loadQuizzesBtn.style.display = "block";
+      quizzes = [];
     });
 
     async function loadQuizzesFromBackend() {
@@ -1346,15 +1536,17 @@
       quizProgress.textContent = `Question ${index + 1} of ${quizzes.length}`;
 
       const qText = document.createElement("div");
-      qText.style.fontSize = "11px";
-      qText.style.marginBottom = "6px";
+      qText.style.fontSize = "13px";
+      qText.style.marginBottom = "12px";
+      qText.style.fontWeight = "600";
+      qText.style.color = "var(--text)";
       qText.textContent = q.question;
       quizArea.appendChild(qText);
 
       const solutionBox = document.createElement("div");
-      solutionBox.style.fontSize = "11px";
-      solutionBox.style.marginTop = "8px";
-      solutionBox.style.color = "#9ca3af";
+      solutionBox.style.fontSize = "12px";
+      solutionBox.style.marginTop = "12px";
+      solutionBox.style.color = "var(--muted)";
       quizArea.appendChild(solutionBox);
 
       q.options.forEach((opt, optIndex) => {
@@ -1375,7 +1567,7 @@
           } else {
             div.classList.add("wrong");
             quizFeedback.textContent =
-              "Ooh, you got it wrong. No worries — here’s the correct answer and explanation 👇";
+              "Ooh, you got it wrong. No worries — here's the correct answer and explanation 👇";
           }
 
           const explanation =
