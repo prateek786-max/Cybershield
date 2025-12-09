@@ -812,7 +812,7 @@
               <span class="tag-dot"></span> Student Cyber Safety Hub
             </div>
             <h1 class="hero-title">
-              Learn to stay <span>safe</span><br />online.
+Learn to stay <span class="safe" id="typingWord">safe</span><br />
             </h1>
             <p class="hero-subtitle">
               Learn how to avoid scams, protect your accounts, and stay safe on social media and public networks.
@@ -1615,7 +1615,46 @@
       currentQuizIndex = (currentQuizIndex + 1) % quizzes.length;
       loadQuiz(currentQuizIndex);
     });
+// ✅ Typing + Erase Animation for "safe / secure / alert"
+
+const words = ["safe", "secure", "alert"];
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+const typingElement = document.getElementById("typingWord");
+
+function typeEffect() {
+  const currentWord = words[wordIndex];
+
+  if (!isDeleting) {
+    // typing
+    typingElement.textContent = currentWord.substring(0, charIndex + 1);
+    charIndex++;
+
+    if (charIndex === currentWord.length) {
+      setTimeout(() => (isDeleting = true), 1200); // pause after full word
+    }
+  } else {
+    // deleting
+    typingElement.textContent = currentWord.substring(0, charIndex - 1);
+    charIndex--;
+
+    if (charIndex === 0) {
+      isDeleting = false;
+      wordIndex = (wordIndex + 1) % words.length;
+    }
+  }
+
+  const speed = isDeleting ? 60 : 120;
+  setTimeout(typeEffect, speed);
+}
+
+typeEffect(); // start animation
+
+
   </script>
 </body>
 </html>
+
 
